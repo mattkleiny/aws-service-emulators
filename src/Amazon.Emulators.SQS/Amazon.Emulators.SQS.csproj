@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>An emulator for the Simple Queue Service (SQS)</Description>
+  </PropertyGroup>
+  <Import Project="../../Shared.props" />
+  <ItemGroup>
+    <ProjectReference Include="..\Amazon.Emulators\Amazon.Emulators.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SQS" Version="3.3.3.11" />
+  </ItemGroup>
+</Project>
