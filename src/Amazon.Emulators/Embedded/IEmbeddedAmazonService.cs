@@ -2,6 +2,8 @@
 
 namespace Amazon.Emulators.Embedded
 {
+  // TODO: rethink this pattern
+  
   /// <summary>Represents an embedded <see cref="IAmazonService"/>.</summary>
   public interface IEmbeddedAmazonService<out TService>
     where TService : class, IAmazonService

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators.Example.Internal;
 using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
+using Amazon.Lambda.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using JetBrains.Annotations;
@@ -42,9 +44,17 @@ namespace Amazon.Emulators.Example
     }
 
     [LambdaFunction("consumer")]
-    public async Task Consumer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
+    public async Task Consumer(IAmazonSQS sqs, IAmazonLambda lambda, CancellationToken cancellationToken = default)
     {
       var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
+
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
 
       while (!cancellationToken.IsCancellationRequested)
       {
@@ -59,24 +69,52 @@ namespace Amazon.Emulators.Example
 
         foreach (var message in batch.Messages)
         {
-          Console.WriteLine(message);
+          var execution = new InvokeRequest
+          {
+            FunctionName = "handler",
+            Payload      = message.Body
+          };
+
+          var result = await lambda.InvokeAsync(execution, cancellationToken);
+
+          using (var reader = new StreamReader(result.Payload))
+          {
+            Console.WriteLine(await reader.ReadToEndAsync());
+          }
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
       }
     }
 
+    [LambdaFunction("handler")]
+    public Task<string> Handler(string input, CancellationToken cancellationToken = default)
+    {
+      return Task.FromResult(input.ToUpper());
+    }
+
     [UsedImplicitly]
     public void ConfigureServices(IServiceCollection services, IHostingEnvironment environment)
     {
+      services.AddFunctionalHandlers<Startup>();
+
       services.AddSQS();
       services.AddLambda();
-      services.AddFunctionalHandlers<Startup>();
 
       if (environment.IsDevelopment())
       {
         services.ReplaceWithEmbedded<IAmazonSQS, EmbeddedAmazonSQS>();
-        services.ReplaceWithEmbedded<IAmazonLambda, EmbeddedAmazonLambda>();
+        services.ReplaceWithEmbedded<IAmazonLambda, EmbeddedAmazonLambda>(provider =>
+        {
+          var host = provider.GetRequiredService<IHost>();
+
+          return new EmbeddedAmazonLambda(resolver: (input, context) =>
+          {
+            var handler = host.Services.ResolveLambdaHandler(input, context);
+            
+            return handler.ExecuteAsync;
+          });
+        });
       }
     }
   }
