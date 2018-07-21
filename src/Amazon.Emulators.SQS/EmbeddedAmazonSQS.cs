@@ -5,14 +5,14 @@ using Amazon.SQS.Model;
 namespace Amazon.SQS
 {
   /// <summary>An embedded implementation of <see cref="IAmazonSQS"/>.</summary>
-  public sealed class EmbeddedSQS : EmbeddedService<IAmazonSQS>
+  public sealed class EmbeddedAmazonSQS : IEmbeddedAmazonService<IAmazonSQS>
   {
     private readonly ConcurrentDictionary<string, Queue> queuesByName = new ConcurrentDictionary<string, Queue>();
     private readonly ConcurrentDictionary<string, Queue> queuesByUrl  = new ConcurrentDictionary<string, Queue>();
 
-    public EmbeddedSQS() => Client = new EmbeddedSQSClient(this);
+    public EmbeddedAmazonSQS() => Client = new EmbeddedSQSClient(this);
 
-    public override IAmazonSQS Client { get; }
+    public IAmazonSQS Client { get; }
 
     internal Queue GetOrCreateQueue(string name)
     {

@@ -7,12 +7,12 @@ using Amazon.SQS.Model;
 
 namespace Amazon.SQS
 {
-  /// <summary>An <see cref="IAmazonSQS"/> client that uses our <see cref="EmbeddedSQS"/> implementation.</summary>
+  /// <summary>An <see cref="IAmazonSQS"/> client that uses our <see cref="EmbeddedAmazonSQS"/> implementation.</summary>
   internal sealed class EmbeddedSQSClient : EmbeddedSQSClientBase
   {
-    private readonly EmbeddedSQS parent;
+    private readonly EmbeddedAmazonSQS parent;
 
-    public EmbeddedSQSClient(EmbeddedSQS parent)
+    public EmbeddedSQSClient(EmbeddedAmazonSQS parent)
     {
       Check.NotNull(parent, nameof(parent));
 

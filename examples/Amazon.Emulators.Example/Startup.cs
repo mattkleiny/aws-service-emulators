@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators.Example.Internal;
+using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
 using Amazon.SQS;
 using Amazon.SQS.Model;
@@ -69,11 +70,13 @@ namespace Amazon.Emulators.Example
     public void ConfigureServices(IServiceCollection services, IHostingEnvironment environment)
     {
       services.AddSQS();
+      services.AddLambda();
       services.AddFunctionalHandlers<Startup>();
 
       if (environment.IsDevelopment())
       {
-        services.ReplaceWithEmbedded<IAmazonSQS, EmbeddedSQS>();
+        services.ReplaceWithEmbedded<IAmazonSQS, EmbeddedAmazonSQS>();
+        services.ReplaceWithEmbedded<IAmazonLambda, EmbeddedAmazonLambda>();
       }
     }
   }

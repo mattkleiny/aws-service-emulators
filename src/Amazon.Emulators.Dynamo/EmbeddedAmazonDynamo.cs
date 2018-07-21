@@ -4,8 +4,8 @@ using Amazon.Emulators.Embedded;
 namespace Amazon.Dynamo
 {
   /// <summary>An embedded implementation of <see cref="IAmazonDynamoDB"/>.</summary>
-  public sealed class EmbeddedDynamo : EmbeddedService<IAmazonDynamoDB>
+  public sealed class EmbeddedAmazonDynamo : IEmbeddedAmazonService<IAmazonDynamoDB>
   {
-    public override IAmazonDynamoDB Client { get; }
+    public IAmazonDynamoDB Client { get; }
   }
 }

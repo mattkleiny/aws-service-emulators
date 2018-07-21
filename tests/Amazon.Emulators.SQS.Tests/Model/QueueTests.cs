@@ -24,9 +24,11 @@ namespace Amazon.SQS.Model
       queue.Enqueue(new Message());
       queue.Enqueue(new Message());
 
-      var messages = queue.Dequeue(4);
+      var firstBatch = queue.Dequeue(4);
+      Assert.Equal(4, firstBatch.Count);
 
-      Assert.Equal(4, messages.Count);
+      var secondBatch = queue.Dequeue(4);
+      Assert.Empty(secondBatch);
     }
   }
 }

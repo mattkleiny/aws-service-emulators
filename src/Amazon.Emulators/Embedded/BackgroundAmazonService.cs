@@ -5,8 +5,8 @@ using Microsoft.Extensions.Hosting;
 
 namespace Amazon.Emulators.Embedded
 {
-  /// <summary>A background <see cref="IEmbeddedService{TService}"/> that uses a long-running worker for background tasks.</summary>
-  public abstract class EmbeddedBackgroundService<TService> : BackgroundService, IEmbeddedService<TService>
+  /// <summary>A background <see cref="IEmbeddedAmazonService{TService}"/> that uses a long-running worker for background tasks.</summary>
+  public abstract class BackgroundAmazonService<TService> : BackgroundService, IEmbeddedAmazonService<TService>
     where TService : class, IAmazonService
   {
     public abstract TService Client { get; }
