@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.Dynamo", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.UI.Console", "src\Amazon.Emulators.UI.Console\Amazon.Emulators.UI.Console.csproj", "{1F0EA249-26AE-4CA3-81F2-01631CB32B55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.SQS.Tests", "tests\Amazon.Emulators.SQS.Tests\Amazon.Emulators.SQS.Tests.csproj", "{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2E960A52-CEA1-4F1B-8059-64EA1FAE11A8} = {2C797D14-0818-4DA2-9A25-22876B790CC2}
 		{710D45E0-DC86-4D3C-9BA8-88059BFF2AEA} = {17937E10-36A8-443E-BE71-D0083863D446}
+		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB} = {043A47DD-CC4B-4A63-AE60-1354AE2D4B6A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{161FAD9F-A47A-4518-9C03-BE0C69F99AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -73,5 +76,9 @@ Global
 		{1F0EA249-26AE-4CA3-81F2-01631CB32B55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F0EA249-26AE-4CA3-81F2-01631CB32B55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F0EA249-26AE-4CA3-81F2-01631CB32B55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

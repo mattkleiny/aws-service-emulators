@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators.Example.Internal;
-using Amazon.Lambda.Core;
 using Amazon.Lambda.Hosting;
 using Amazon.SQS;
 using Amazon.SQS.Model;
@@ -14,20 +13,18 @@ namespace Amazon.Emulators.Example
 {
   public sealed class Startup
   {
+    private const string QueueName = "test-queue";
+
     public static IHostBuilder HostBuilder => new HostBuilder()
       .UseStartup<Startup>();
 
     public static async Task<int> Main(string[] args)
       => await HostBuilder.RunLambdaConsoleAsync(args);
 
-    [UsedImplicitly]
-    public static async Task<object> ExecuteAsync(object input, ILambdaContext context)
-      => await HostBuilder.RunLambdaAsync(input, context);
-
     [LambdaFunction("producer")]
-    public async void Producer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
+    public async Task Producer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
     {
-      var queueUrl = (await sqs.GetQueueUrlAsync("test-queue", cancellationToken)).QueueUrl;
+      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
 
       while (!cancellationToken.IsCancellationRequested)
       {
@@ -44,9 +41,9 @@ namespace Amazon.Emulators.Example
     }
 
     [LambdaFunction("consumer")]
-    public async void Consumer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
+    public async Task Consumer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
     {
-      var queueUrl = (await sqs.GetQueueUrlAsync("test-queue", cancellationToken)).QueueUrl;
+      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
 
       while (!cancellationToken.IsCancellationRequested)
       {

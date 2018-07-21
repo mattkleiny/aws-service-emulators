@@ -110,6 +110,8 @@ namespace Amazon.SQS
 
     public Task<GetQueueUrlResponse> GetQueueUrlAsync(string queueName, CancellationToken cancellationToken = default)
     {
+      Check.NotNullOrEmpty(queueName, nameof(queueName));
+
       return GetQueueUrlAsync(new GetQueueUrlRequest(queueName), cancellationToken);
     }
 
@@ -148,9 +150,9 @@ namespace Amazon.SQS
       throw new NotSupportedException();
     }
 
-    public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl, CancellationToken cancellationToken = default)
+    public Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl, CancellationToken cancellationToken = default)
     {
-      throw new NotSupportedException();
+      return ReceiveMessageAsync(new ReceiveMessageRequest(queueUrl), cancellationToken);
     }
 
     public virtual Task<ReceiveMessageResponse> ReceiveMessageAsync(ReceiveMessageRequest request, CancellationToken cancellationToken = default)
@@ -170,6 +172,9 @@ namespace Amazon.SQS
 
     public Task<SendMessageResponse> SendMessageAsync(string queueUrl, string messageBody, CancellationToken cancellationToken = default)
     {
+      Check.NotNullOrEmpty(queueUrl, nameof(queueUrl));
+      Check.NotNullOrEmpty(messageBody, nameof(messageBody));
+
       return SendMessageAsync(new SendMessageRequest(queueUrl, messageBody), cancellationToken);
     }
 

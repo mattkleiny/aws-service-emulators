@@ -14,11 +14,18 @@ namespace Amazon.SQS
 
     public override IAmazonSQS Client { get; }
 
-    internal bool TryGetQueueByName(string name, out Queue queue)
+    internal Queue GetOrCreateQueue(string name)
     {
       Check.NotNullOrEmpty(name, nameof(name));
 
-      return queuesByName.TryGetValue(name, out queue);
+      return queuesByName.GetOrAdd(name, _ =>
+      {
+        var queue = new Queue(name);
+
+        queuesByUrl.AddOrUpdate(queue.Url, queue, (url, existing) => queue);
+
+        return queue;
+      });
     }
 
     internal bool TryGetQueueByUrl(string url, out Queue queue)

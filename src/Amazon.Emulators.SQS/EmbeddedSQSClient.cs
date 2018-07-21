@@ -21,13 +21,9 @@ namespace Amazon.SQS
 
     public override Task<GetQueueUrlResponse> GetQueueUrlAsync(GetQueueUrlRequest request, CancellationToken cancellationToken = default)
     {
-      if (!parent.TryGetQueueByName(request.QueueName, out var queue))
-      {
-        return Task.FromResult(new GetQueueUrlResponse
-        {
-          HttpStatusCode = HttpStatusCode.NotFound
-        });
-      }
+      Check.NotNull(request, nameof(request));
+
+      var queue = parent.GetOrCreateQueue(request.QueueName);
 
       return Task.FromResult(new GetQueueUrlResponse
       {
@@ -38,6 +34,8 @@ namespace Amazon.SQS
 
     public override Task<SendMessageResponse> SendMessageAsync(SendMessageRequest request, CancellationToken cancellationToken = default)
     {
+      Check.NotNull(request, nameof(request));
+
       if (!parent.TryGetQueueByUrl(request.QueueUrl, out var queue))
       {
         return Task.FromResult(new SendMessageResponse
@@ -58,6 +56,27 @@ namespace Amazon.SQS
       return Task.FromResult(new SendMessageResponse
       {
         MessageId      = message.MessageId,
+        HttpStatusCode = HttpStatusCode.OK
+      });
+    }
+
+    public override Task<ReceiveMessageResponse> ReceiveMessageAsync(ReceiveMessageRequest request, CancellationToken cancellationToken = default)
+    {
+      Check.NotNull(request, nameof(request));
+
+      if (!parent.TryGetQueueByUrl(request.QueueUrl, out var queue))
+      {
+        return Task.FromResult(new ReceiveMessageResponse
+        {
+          HttpStatusCode = HttpStatusCode.NotFound
+        });
+      }
+
+      var messages = queue.Dequeue(request.MaxNumberOfMessages);
+
+      return Task.FromResult(new ReceiveMessageResponse
+      {
+        Messages       = messages,
         HttpStatusCode = HttpStatusCode.OK
       });
     }
