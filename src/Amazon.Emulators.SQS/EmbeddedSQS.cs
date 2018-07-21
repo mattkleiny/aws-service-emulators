@@ -10,10 +10,7 @@ namespace Amazon.SQS
     private readonly ConcurrentDictionary<string, Queue> queuesByName = new ConcurrentDictionary<string, Queue>();
     private readonly ConcurrentDictionary<string, Queue> queuesByUrl  = new ConcurrentDictionary<string, Queue>();
 
-    public EmbeddedSQS()
-    {
-      Client = new EmbeddedSQSClient(this);
-    }
+    public EmbeddedSQS() => Client = new EmbeddedSQSClient(this);
 
     public override IAmazonSQS Client { get; }
 
