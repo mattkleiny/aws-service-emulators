@@ -7,7 +7,7 @@ using Amazon.SimpleNotificationService;
 namespace Amazon.SNS
 {
   /// <summary>An embedded implementation of <see cref="IAmazonSimpleNotificationService"/>.</summary>
-  public sealed class EmbeddedSNS : BackgroundEmbeddedService<IAmazonSimpleNotificationService>
+  public sealed class EmbeddedSNS : EmbeddedBackgroundService<IAmazonSimpleNotificationService>
   {
     public override IAmazonSimpleNotificationService Client { get; }
 

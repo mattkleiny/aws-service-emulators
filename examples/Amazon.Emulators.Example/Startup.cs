@@ -38,6 +38,8 @@ namespace Amazon.Emulators.Example
         };
 
         await sqs.SendMessageAsync(request, cancellationToken);
+
+        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
       }
     }
 
@@ -61,6 +63,8 @@ namespace Amazon.Emulators.Example
         {
           Console.WriteLine(message);
         }
+
+        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
       }
     }
 
