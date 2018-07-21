@@ -1,17 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Description>An example application of the embedded emulators.</Description>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Amazon.Emulators.Dynamo\Amazon.Emulators.Dynamo.csproj" />
+    <ProjectReference Include="..\..\src\Amazon.Emulators.S3\Amazon.Emulators.S3.csproj" />
+    <ProjectReference Include="..\..\src\Amazon.Emulators.SNS\Amazon.Emulators.SNS.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Emulators.SQS\Amazon.Emulators.SQS.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Runtime" Version="1.0.0-CI00063" />
     <PackageReference Include="Amazon.Lambda.Runtime.Console" Version="1.0.0-CI00063" />
+    <PackageReference Include="Amazon.Lambda.Runtime.Dynamo" Version="1.0.0-CI00063" />
     <PackageReference Include="Amazon.Lambda.Runtime.S3" Version="1.0.0-CI00063" />
+    <PackageReference Include="Amazon.Lambda.Runtime.SNS" Version="1.0.0-CI00063" />
     <PackageReference Include="Amazon.Lambda.Runtime.SQS" Version="1.0.0-CI00063" />
   </ItemGroup>
   <Import Project="../../Shared.props" />

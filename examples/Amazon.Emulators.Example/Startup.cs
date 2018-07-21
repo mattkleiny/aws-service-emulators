@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading;
-using Amazon.Emulators.Embedded;
+using System.Threading.Tasks;
 using Amazon.Emulators.Example.Internal;
+using Amazon.Lambda.Core;
 using Amazon.Lambda.Hosting;
 using Amazon.SQS;
 using Amazon.SQS.Model;
@@ -13,6 +14,16 @@ namespace Amazon.Emulators.Example
 {
   public sealed class Startup
   {
+    public static IHostBuilder HostBuilder => new HostBuilder()
+      .UseStartup<Startup>();
+
+    public static async Task<int> Main(string[] args)
+      => await HostBuilder.RunLambdaConsoleAsync(args);
+
+    [UsedImplicitly]
+    public static async Task<object> ExecuteAsync(object input, ILambdaContext context)
+      => await HostBuilder.RunLambdaAsync(input, context);
+
     [LambdaFunction("producer")]
     public async void Producer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
     {
@@ -59,13 +70,10 @@ namespace Amazon.Emulators.Example
       services.AddSQS();
       services.AddFunctionalHandlers<Startup>();
 
-      services.ConfigureHostingOptions(options =>
+      if (environment.IsDevelopment())
       {
-        if (environment.IsDevelopment())
-        {
-          services.ReplaceWith<IAmazonSQS, EmbeddedAmazonSQS>();
-        }
-      });
+        services.ReplaceWithEmbedded<IAmazonSQS, EmbeddedSQS>();
+      }
     }
   }
 }
