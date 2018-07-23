@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Emulators.Example.Internal;
 using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
 using Amazon.Lambda.Model;
@@ -18,8 +17,8 @@ namespace Amazon.Emulators.Example
   {
     private const string QueueName = "test-queue";
 
-    public static IHostBuilder HostBuilder => new HostBuilder()
-      .UseStartup<Startup>();
+    public static IHostBuilder HostBuilder
+      => new HostBuilder().UseStartup<Startup>();
 
     public static async Task<int> Main(string[] args)
       => await HostBuilder.RunLambdaConsoleAsync(args);
@@ -48,13 +47,10 @@ namespace Amazon.Emulators.Example
     {
       var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
 
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
-      await sqs.SendMessageAsync(queueUrl, "Hello, World!");
+      for (var i = 0; i < 100; i++)
+      {
+        await sqs.SendMessageAsync(queueUrl, "Hello, World!", cancellationToken);
+      }
 
       while (!cancellationToken.IsCancellationRequested)
       {
@@ -98,23 +94,13 @@ namespace Amazon.Emulators.Example
     {
       services.AddFunctionalHandlers<Startup>();
 
-      services.AddSQS();
-      services.AddLambda();
-
       if (environment.IsDevelopment())
       {
-        services.ReplaceWithEmbedded<IAmazonSQS, EmbeddedAmazonSQS>();
-        services.ReplaceWithEmbedded<IAmazonLambda, EmbeddedAmazonLambda>(provider =>
-        {
-          var host = provider.GetRequiredService<IHost>();
-
-          return new EmbeddedAmazonLambda(resolver: (input, context) =>
-          {
-            var handler = host.Services.ResolveLambdaHandler(input, context);
-            
-            return handler.ExecuteAsync;
-          });
-        });
+      }
+      else
+      {
+        services.AddSQS();
+        services.AddLambda();
       }
     }
   }

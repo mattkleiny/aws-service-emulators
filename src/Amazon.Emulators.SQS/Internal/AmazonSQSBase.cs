@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Emulators.Embedded;
+using Amazon.Emulators;
 using Amazon.Runtime;
 using Amazon.SQS.Model;
 
-namespace Amazon.SQS
+namespace Amazon.SQS.Internal
 {
   /// <summary>Base class for any <see cref="Amazon.SQS.IAmazonSQS"/> implementations, to help separate plumbing from intent.</summary>
-  internal abstract class EmbeddedSQSClientBase : IAmazonSQS
+  internal abstract class AmazonSQSBase : IAmazonSQS
   {
     public IClientConfig Config { get; } = EmbeddedClientConfig.Instance;
 

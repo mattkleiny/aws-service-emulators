@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Emulators.Embedded;
+using Amazon.Emulators;
 using Amazon.Lambda.Model;
 using Amazon.Runtime;
 
-namespace Amazon.Lambda
+namespace Amazon.Lambda.Internal
 {
   /// <summary>Base class for any <see cref="IAmazonLambda"/> implementations, to help separate plumbing from intent.</summary>
-  internal abstract class EmbeddedLambdaClientBase : IAmazonLambda
+  internal abstract class AmazonLambdaBase : IAmazonLambda
   {
     public IClientConfig Config { get; } = EmbeddedClientConfig.Instance;
 

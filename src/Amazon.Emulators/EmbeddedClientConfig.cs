@@ -2,7 +2,7 @@
 using System.Net;
 using Amazon.Runtime;
 
-namespace Amazon.Emulators.Embedded
+namespace Amazon.Emulators
 {
   public sealed class EmbeddedClientConfig : IClientConfig
   {

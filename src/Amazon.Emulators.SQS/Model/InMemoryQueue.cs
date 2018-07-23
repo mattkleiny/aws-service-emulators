@@ -1,21 +1,26 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Amazon.SQS.Model
 {
-  /// <summary>An embedded SQS queue.</summary>
-  internal sealed class Queue
+  /// <summary>An in-memory SQS <see cref="IQueue"/> implementation</summary>
+  /// <remarks>This implementation is thread-safe.</remarks>
+  internal sealed class InMemoryQueue : IQueue
   {
     private readonly ConcurrentQueue<Message> messages = new ConcurrentQueue<Message>();
 
-    public Queue(string name)
+    public InMemoryQueue(string name)
     {
+      Check.NotNullOrEmpty(name, nameof(name));
+
       Name = name;
+      Url  = new Uri($"https://embedded.amazon.sqs.com/123456789/{Name}");
     }
 
     public string Name { get; }
-    public string Url  => $"https://embedded.amazon.sqs.com/123456789/{Name}";
+    public Uri    Url  { get; }
 
     public void Enqueue(Message message)
     {
@@ -24,13 +29,14 @@ namespace Amazon.SQS.Model
       messages.Enqueue(message);
     }
 
-    public List<Message> Dequeue(int maxMessages)
+    public Message[] Dequeue(int maxMessages)
     {
       Check.That(maxMessages > 0, "maxMessages > 0");
 
-      return Take(maxMessages).ToList();
+      return Take(maxMessages).ToArray();
     }
 
+    /// <summary>Tries to take up to <see cref="maxMessages"/> from the queue.</summary>
     private IEnumerable<Message> Take(int maxMessages)
     {
       for (var i = 0; i < maxMessages; i++)
@@ -39,7 +45,7 @@ namespace Amazon.SQS.Model
         {
           yield break;
         }
-        
+
         yield return message;
       }
     }
