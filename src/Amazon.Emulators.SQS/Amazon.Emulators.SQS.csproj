@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Description>An emulator for the Simple Queue Service (SQS)</Description>
+    <Description>An emulator for Amazon's Simple Queue Service (SQS).</Description>
     <RootNamespace>Amazon.SQS</RootNamespace>
   </PropertyGroup>
   <Import Project="../../Shared.props" />

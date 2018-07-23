@@ -4,9 +4,9 @@ using Amazon.Runtime;
 
 namespace Amazon.Emulators
 {
-  public sealed class EmbeddedClientConfig : IClientConfig
+  public sealed class EmptyClientConfig : IClientConfig
   {
-    public static readonly EmbeddedClientConfig Instance = new EmbeddedClientConfig();
+    public static readonly EmptyClientConfig Instance = new EmptyClientConfig();
 
     public RegionEndpoint   RegionEndpoint            { get; } = RegionEndpoint.APSoutheast2;
     public string           RegionEndpointServiceName { get; } = string.Empty;

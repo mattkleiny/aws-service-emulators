@@ -96,6 +96,13 @@ namespace Amazon.Emulators.Example
 
       if (environment.IsDevelopment())
       {
+        services.AddEmulator<IAmazonSQS, AmazonSQSEmulator>(
+          () => new AmazonSQSEmulator(
+            endpoint: RegionEndpoint.APSoutheast2,
+            accountId: 123456789,
+            queueFactory: url => new InMemoryQueue(url)
+          )
+        );
       }
       else
       {

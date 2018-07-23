@@ -11,7 +11,7 @@ namespace Amazon.SQS.Internal
   /// <summary>Base class for any <see cref="Amazon.SQS.IAmazonSQS"/> implementations, to help separate plumbing from intent.</summary>
   internal abstract class AmazonSQSBase : IAmazonSQS
   {
-    public IClientConfig Config { get; } = EmbeddedClientConfig.Instance;
+    public IClientConfig Config { get; } = EmptyClientConfig.Instance;
 
     public virtual Task<Dictionary<string, string>> GetAttributesAsync(string queueUrl)
     {

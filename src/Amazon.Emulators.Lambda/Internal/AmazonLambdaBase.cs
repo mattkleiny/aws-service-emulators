@@ -10,7 +10,7 @@ namespace Amazon.Lambda.Internal
   /// <summary>Base class for any <see cref="IAmazonLambda"/> implementations, to help separate plumbing from intent.</summary>
   internal abstract class AmazonLambdaBase : IAmazonLambda
   {
-    public IClientConfig Config { get; } = EmbeddedClientConfig.Instance;
+    public IClientConfig Config { get; } = EmptyClientConfig.Instance;
 
     public virtual Task<AddPermissionResponse> AddPermissionAsync(AddPermissionRequest request, CancellationToken cancellationToken = default)
     {
