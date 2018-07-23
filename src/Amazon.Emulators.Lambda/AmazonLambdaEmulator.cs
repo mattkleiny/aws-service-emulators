@@ -39,5 +39,13 @@ namespace Amazon.Lambda
 
       return await handler(input, context, cancellationToken);
     }
+
+    /// <summary>Schedules the execution of a lambda on a background worker.</summary>
+    public void ScheduledLambda(object input, ILambdaContext context, CancellationToken cancellationToken = default)
+    {
+      var handler = ResolveHandler(input, context);
+
+      Task.Run(() => handler(input, context, CancellationToken.None), cancellationToken);
+    }
   }
 }
