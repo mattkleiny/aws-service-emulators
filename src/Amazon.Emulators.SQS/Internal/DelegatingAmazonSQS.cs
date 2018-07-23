@@ -10,11 +10,11 @@ namespace Amazon.SQS.Internal
   // TODO: double check these response codes
 
   /// <summary>An <see cref="IAmazonSQS"/> implementation that delegates directly to an <see cref="AmazonSQSEmulator"/>.</summary>
-  internal sealed class EmulatedAmazonSQSClient : AmazonSQSBase
+  internal sealed class DelegatingAmazonSQS : AmazonSQSBase
   {
     private readonly AmazonSQSEmulator emulator;
 
-    public EmulatedAmazonSQSClient(AmazonSQSEmulator emulator)
+    public DelegatingAmazonSQS(AmazonSQSEmulator emulator)
     {
       Check.NotNull(emulator, nameof(emulator));
 
@@ -63,7 +63,16 @@ namespace Amazon.SQS.Internal
 
     public override Task<ReceiveMessageResponse> ReceiveMessageAsync(ReceiveMessageRequest request, CancellationToken cancellationToken = default)
     {
-      throw new NotImplementedException();
+      Check.NotNull(request, nameof(request));
+
+      var queue    = emulator.GetOrCreateByUrl(request.QueueUrl);
+      var messages = queue.Dequeue(request.MaxNumberOfMessages);
+
+      return Task.FromResult(new ReceiveMessageResponse
+      {
+        Messages       = messages.ToList(),
+        HttpStatusCode = HttpStatusCode.OK
+      });
     }
   }
 }

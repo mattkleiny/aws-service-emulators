@@ -31,7 +31,7 @@ namespace Amazon.SQS
       this.accountId    = accountId;
       this.queueFactory = queueFactory;
 
-      Client = new EmulatedAmazonSQSClient(this);
+      Client = new DelegatingAmazonSQS(this);
     }
 
     public IAmazonSQS Client { get; }
