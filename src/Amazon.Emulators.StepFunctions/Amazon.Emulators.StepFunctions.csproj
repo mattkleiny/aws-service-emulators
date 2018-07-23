@@ -9,6 +9,7 @@
     <ProjectReference Include="..\Amazon.Emulators\Amazon.Emulators.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Amazon.StepFunction.Runtime" Version="1.0.0-CI00018" />
     <PackageReference Include="AWSSDK.StepFunctions" Version="3.3.2.9" />
   </ItemGroup>
 </Project>

@@ -7,7 +7,6 @@ using Amazon.SQS.Model;
 namespace Amazon.SQS
 {
   /// <summary>An emulator for Amazon's Simple Queue Service (SQS).</summary>
-  /// <remarks>This implementation is thread-safe.</remarks>
   public sealed class AmazonSQSEmulator : IAmazonServiceEmulator<IAmazonSQS>
   {
     private readonly ConcurrentDictionary<QueueUrl, IQueue> queuesByUrl = new ConcurrentDictionary<QueueUrl, IQueue>();

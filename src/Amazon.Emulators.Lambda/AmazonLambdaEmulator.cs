@@ -3,12 +3,16 @@ using System.Threading.Tasks;
 using Amazon.Emulators;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.Internal;
-using Amazon.Lambda.Model;
 
 namespace Amazon.Lambda
 {
+  /// <summary>Permits resolution of <see cref="LambdaHandler"/>s for some given input and context.</summary>
+  public delegate LambdaHandler LambdaResolver(object input, ILambdaContext context);
+
+  /// <summary>Represents an implementation of a lambda function.</summary>
+  public delegate Task<object> LambdaHandler(object input, ILambdaContext context, CancellationToken cancellationToken = default);
+
   /// <summary>An emulator for Amazon's Lambda Service.</summary>
-  /// <remarks>This implementation is thread-safe.</remarks>
   public sealed class AmazonLambdaEmulator : IAmazonServiceEmulator<IAmazonLambda>
   {
     private readonly LambdaResolver resolver;
@@ -38,14 +42,6 @@ namespace Amazon.Lambda
       var handler = ResolveHandler(input, context);
 
       return await handler(input, context, cancellationToken);
-    }
-
-    /// <summary>Schedules the execution of a lambda on a background worker.</summary>
-    public void ScheduledLambda(object input, ILambdaContext context, CancellationToken cancellationToken = default)
-    {
-      var handler = ResolveHandler(input, context);
-
-      Task.Run(() => handler(input, context, CancellationToken.None), cancellationToken);
     }
   }
 }

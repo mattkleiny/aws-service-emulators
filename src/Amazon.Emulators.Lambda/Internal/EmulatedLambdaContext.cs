@@ -1,7 +1,7 @@
 ﻿using System;
 using Amazon.Lambda.Core;
 
-namespace Amazon.Lambda.Model
+namespace Amazon.Lambda.Internal
 {
   /// <summary>A <see cref="ILambdaContext"/> for emulated execution.</summary>
   internal sealed class EmulatedLambdaContext : ILambdaContext

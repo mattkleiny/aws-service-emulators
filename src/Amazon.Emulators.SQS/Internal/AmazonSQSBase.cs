@@ -152,6 +152,8 @@ namespace Amazon.SQS.Internal
 
     public Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl, CancellationToken cancellationToken = default)
     {
+      Check.NotNullOrEmpty(queueUrl, nameof(queueUrl));
+      
       return ReceiveMessageAsync(new ReceiveMessageRequest(queueUrl), cancellationToken);
     }
 

@@ -6,6 +6,7 @@
     <Description>An example application of the embedded emulators.</Description>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <Import Project="../../Shared.props" />
   <ItemGroup>
     <ProjectReference Include="..\..\src\Amazon.Emulators.Dynamo\Amazon.Emulators.Dynamo.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Emulators.Lambda\Amazon.Emulators.Lambda.csproj" />
@@ -24,5 +25,7 @@
     <PackageReference Include="Amazon.Lambda.Runtime.SQS" Version="1.0.0-CI00063" />
     <PackageReference Include="Amazon.Lambda.Runtime.StepFunctions" Version="1.0.0-CI00063" />
   </ItemGroup>
-  <Import Project="../../Shared.props" />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\*" />
+  </ItemGroup>
 </Project>

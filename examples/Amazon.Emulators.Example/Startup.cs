@@ -1,12 +1,13 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
-using Amazon.Lambda.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using Amazon.StepFunction;
+using Amazon.StepFunctions;
+using Amazon.StepFunctions.Model;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,14 +24,14 @@ namespace Amazon.Emulators.Example
     public static async Task<int> Main(string[] args)
       => await HostBuilder.RunLambdaConsoleAsync(args);
 
-    [LambdaFunction("sqs-test")]
-    public async Task QueueTest(IAmazonSQS sqs, IAmazonLambda lambda, CancellationToken cancellationToken = default)
+    [LambdaFunction("emulator-test")]
+    public async Task EmulatorTest(IAmazonSQS sqs, IAmazonStepFunctions stepFunctions, CancellationToken cancellationToken = default)
     {
       var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
 
       for (var i = 0; i < 100; i++)
       {
-        await sqs.SendMessageAsync(queueUrl, "Hello, World!", cancellationToken);
+        await sqs.SendMessageAsync(queueUrl, "world", cancellationToken);
       }
 
       while (!cancellationToken.IsCancellationRequested)
@@ -46,29 +47,28 @@ namespace Amazon.Emulators.Example
 
         foreach (var message in batch.Messages)
         {
-          var execution = new InvokeRequest
+          var execution = new StartExecutionRequest
           {
-            FunctionName = "lambda-test",
-            Payload      = message.Body
+            Name            = Guid.NewGuid().ToString(),
+            StateMachineArn = "example:machine:arn",
+            Input           = message.Body
           };
 
-          var result = await lambda.InvokeAsync(execution, cancellationToken);
-
-          using (var reader = new StreamReader(result.Payload))
-          {
-            Console.WriteLine(await reader.ReadToEndAsync());
-          }
+          await stepFunctions.StartExecutionAsync(execution, cancellationToken);
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
       }
     }
 
-    [LambdaFunction("lambda-test")]
-    public Task<string> LambdaTest(string input, CancellationToken cancellationToken = default)
-    {
-      return Task.FromResult(input.ToUpper());
-    }
+    [LambdaFunction("format-message")]
+    public string Format(string input) => $"Hello, {input}!";
+
+    [LambdaFunction("capitalize-message")]
+    public string Capitalize(string input) => input.ToUpper();
+
+    [LambdaFunction("print-message")]
+    public void Print(string input) => Console.WriteLine(input);
 
     [UsedImplicitly]
     public void ConfigureServices(IServiceCollection services, IHostingEnvironment environment)
@@ -90,11 +90,33 @@ namespace Amazon.Emulators.Example
             resolver: (input, context) => provider.ResolveLambdaHandler(input, context).ExecuteAsync
           )
         );
+
+        services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
+          provider => new AmazonStepFunctionsEmulator(
+            arn => EmbeddedResources.ExampleMachine,
+            definition =>
+            {
+              var context = new LocalLambdaContext(definition.Resource);
+
+              return (input, cancellationToken) =>
+              {
+                var handler = provider.ResolveLambdaHandler(input, context);
+
+                return handler.ExecuteAsync(input, context, cancellationToken);
+              };
+            },
+            impositions: new Impositions
+            {
+              WaitTimeOverride = TimeSpan.FromMilliseconds(0)
+            }
+          )
+        );
       }
       else
       {
         services.AddSQS();
         services.AddLambda();
+        services.AddStepFunctions();
       }
     }
   }

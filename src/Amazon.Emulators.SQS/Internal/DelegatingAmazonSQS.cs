@@ -98,9 +98,9 @@ namespace Amazon.SQS.Internal
 
         var builder = new StringBuilder();
 
-        for (var i = 0; i < bytes.Length; i++)
+        for (var i = 0; i < hash.Length; i++)
         {
-          builder.Append(bytes[i].ToString("x2"));
+          builder.Append(hash[i].ToString("x2"));
         }
 
         return builder.ToString();
