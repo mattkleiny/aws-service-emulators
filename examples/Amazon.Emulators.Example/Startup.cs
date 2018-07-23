@@ -23,27 +23,8 @@ namespace Amazon.Emulators.Example
     public static async Task<int> Main(string[] args)
       => await HostBuilder.RunLambdaConsoleAsync(args);
 
-    [LambdaFunction("producer")]
-    public async Task Producer(IAmazonSQS sqs, CancellationToken cancellationToken = default)
-    {
-      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
-
-      while (!cancellationToken.IsCancellationRequested)
-      {
-        var request = new SendMessageRequest
-        {
-          QueueUrl    = queueUrl,
-          MessageBody = "Hello, World!"
-        };
-
-        await sqs.SendMessageAsync(request, cancellationToken);
-
-        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
-      }
-    }
-
-    [LambdaFunction("consumer")]
-    public async Task Consumer(IAmazonSQS sqs, IAmazonLambda lambda, CancellationToken cancellationToken = default)
+    [LambdaFunction("sqs-test")]
+    public async Task QueueTest(IAmazonSQS sqs, IAmazonLambda lambda, CancellationToken cancellationToken = default)
     {
       var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
 
@@ -67,7 +48,7 @@ namespace Amazon.Emulators.Example
         {
           var execution = new InvokeRequest
           {
-            FunctionName = "handler",
+            FunctionName = "lambda-test",
             Payload      = message.Body
           };
 
@@ -83,8 +64,8 @@ namespace Amazon.Emulators.Example
       }
     }
 
-    [LambdaFunction("handler")]
-    public Task<string> Handler(string input, CancellationToken cancellationToken = default)
+    [LambdaFunction("lambda-test")]
+    public Task<string> LambdaTest(string input, CancellationToken cancellationToken = default)
     {
       return Task.FromResult(input.ToUpper());
     }

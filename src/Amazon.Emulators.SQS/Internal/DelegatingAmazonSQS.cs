@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.SQS.Model;
+using Newtonsoft.Json;
 
 namespace Amazon.SQS.Internal
 {
@@ -45,8 +48,8 @@ namespace Amazon.SQS.Internal
         MessageId              = Guid.NewGuid().ToString(),
         Body                   = request.MessageBody,
         Attributes             = request.MessageAttributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.StringValue),
-        MD5OfBody              = string.Empty, // TODO: calculate this
-        MD5OfMessageAttributes = string.Empty  // TODO: calculate this
+        MD5OfBody              = CalculateMD5(request.MessageBody),
+        MD5OfMessageAttributes = CalculateMD5(request.MessageAttributes)
       };
 
       var sequenceNumber = queue.Enqueue(message);
@@ -65,6 +68,8 @@ namespace Amazon.SQS.Internal
     {
       Check.NotNull(request, nameof(request));
 
+      // TODO: support receipt handles (perhaps use an intermediate struct?)
+
       var queue    = emulator.GetOrCreateByUrl(request.QueueUrl);
       var messages = queue.Dequeue(request.MaxNumberOfMessages);
 
@@ -73,6 +78,33 @@ namespace Amazon.SQS.Internal
         Messages       = messages.ToList(),
         HttpStatusCode = HttpStatusCode.OK
       });
+    }
+
+    /// <summary>Converts the given object to JSON and calculates it's MD5 hash.</summary>
+    private static string CalculateMD5(object input)
+    {
+      var json = JsonConvert.SerializeObject(input);
+
+      return CalculateMD5(json);
+    }
+
+    /// <summary>Calculates the MD5 hash of the given string.</summary>
+    private static string CalculateMD5(string input)
+    {
+      using (var md5 = MD5.Create())
+      {
+        var bytes = Encoding.ASCII.GetBytes(input);
+        var hash  = md5.ComputeHash(bytes);
+
+        var builder = new StringBuilder();
+
+        for (var i = 0; i < bytes.Length; i++)
+        {
+          builder.Append(bytes[i].ToString("x2"));
+        }
+
+        return builder.ToString();
+      }
     }
   }
 }
