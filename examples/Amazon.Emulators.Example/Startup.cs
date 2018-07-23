@@ -80,31 +80,20 @@ namespace Amazon.Emulators.Example
         services.AddEmulator<IAmazonSQS, AmazonSQSEmulator>(
           provider => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
-            accountId: 123456789,
-            queueFactory: url => new InMemoryQueue(url)
+            accountId: 123456789
           )
         );
 
         services.AddEmulator<IAmazonLambda, AmazonLambdaEmulator>(
           provider => new AmazonLambdaEmulator(
-            resolver: (input, context) => provider.ResolveLambdaHandler(input, context).ExecuteAsync
+            resolver: provider.ToLambdaResolver()
           )
         );
 
         services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
           provider => new AmazonStepFunctionsEmulator(
             arn => EmbeddedResources.ExampleMachine,
-            definition =>
-            {
-              var context = new LocalLambdaContext(definition.Resource);
-
-              return (input, cancellationToken) =>
-              {
-                var handler = provider.ResolveLambdaHandler(input, context);
-
-                return handler.ExecuteAsync(input, context, cancellationToken);
-              };
-            },
+            factory: provider.ToStepHandlerFactory(),
             impositions: new Impositions
             {
               WaitTimeOverride = TimeSpan.FromMilliseconds(0)

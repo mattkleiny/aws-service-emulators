@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,12 +18,11 @@ namespace Amazon.StepFunctions.Internal
       this.emulator = emulator;
     }
 
-    [SuppressMessage("ReSharper", "MethodSupportsCancellation")]
     public override Task<StartExecutionResponse> StartExecutionAsync(StartExecutionRequest request, CancellationToken cancellationToken = default)
     {
       Check.NotNull(request, nameof(request));
 
-      Task.Run(() => emulator.ExecuteMachineAsync(request.StateMachineArn, request.Input));
+      emulator.ScheduleExecution(request.StateMachineArn, request.Input);
 
       return Task.FromResult(new StartExecutionResponse
       {
