@@ -50,7 +50,7 @@ namespace Amazon.Emulators.Example
           var execution = new StartExecutionRequest
           {
             Name            = Guid.NewGuid().ToString(),
-            StateMachineArn = "example:machine:arn",
+            StateMachineArn = "arn:aws:states:ap-southeast-2:123456789:stateMachine:test-machine",
             Input           = message.Body
           };
 

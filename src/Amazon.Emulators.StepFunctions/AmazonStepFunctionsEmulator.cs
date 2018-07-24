@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Amazon.Emulators;
 using Amazon.StepFunction;
 using Amazon.StepFunctions.Internal;
+using Amazon.StepFunctions.Model;
 
 namespace Amazon.StepFunctions
 {
   /// <summary>Resolves the specification JSON for the given state machine ARN.</summary>
-  public delegate string SpecificationResolver(string arn);
+  public delegate string SpecificationResolver(StateMachineARN arn);
 
   /// <summary>An emulator for Amazon's StepFunctions.</summary>
   public sealed class AmazonStepFunctionsEmulator : IAmazonServiceEmulator<IAmazonStepFunctions>
@@ -50,7 +51,9 @@ namespace Amazon.StepFunctions
     {
       Check.NotNullOrEmpty(arn, nameof(arn));
 
-      return hostsByArn.GetOrAdd(arn, _ => StepFunctionHost.FromJson(resolver(arn), factory));
+      var stateMachineARN = StateMachineARN.Parse(arn);
+
+      return hostsByArn.GetOrAdd(arn, _ => StepFunctionHost.FromJson(resolver(stateMachineARN), factory));
     }
 
     /// <summary>Schedules the execution of a <see cref="StepFunctionHost"/> with the given input and retains it's execution information.</summary>
