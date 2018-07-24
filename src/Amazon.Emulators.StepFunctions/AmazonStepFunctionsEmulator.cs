@@ -30,8 +30,8 @@ namespace Amazon.StepFunctions
 
     public AmazonStepFunctionsEmulator(SpecificationResolver resolver, StepHandlerFactory factory, Impositions impositions)
     {
-      Check.NotNull(resolver,    nameof(resolver));
-      Check.NotNull(factory,     nameof(factory));
+      Check.NotNull(resolver, nameof(resolver));
+      Check.NotNull(factory, nameof(factory));
       Check.NotNull(impositions, nameof(impositions));
 
       this.resolver    = resolver;
@@ -97,8 +97,17 @@ namespace Amazon.StepFunctions
           }
           else
           {
-            State  = ExecutionState.Completed;
-            Output = parent.Result;
+            Result = parent.Result;
+
+            if (Result.IsFailure)
+            {
+              State     = ExecutionState.Failed;
+              Exception = parent.Result.Exception;
+            }
+            else
+            {
+              State = ExecutionState.Completed;
+            }
           }
 
           EndTime = DateTime.Now;
@@ -110,7 +119,8 @@ namespace Amazon.StepFunctions
       public DateTime?      EndTime   { get; private set; }
       public ExecutionState State     { get; private set; }
       public Exception      Exception { get; private set; }
-      public object         Output    { get; private set; }
+
+      public StepFunctionHost.Result Result { get; private set; }
 
       public override string ToString() => $"{Id} - {State} (started at {StartTime})";
     }

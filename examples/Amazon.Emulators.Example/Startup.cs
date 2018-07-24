@@ -92,7 +92,16 @@ namespace Amazon.Emulators.Example
 
         services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
           provider => new AmazonStepFunctionsEmulator(
-            arn => EmbeddedResources.ExampleMachine,
+            arn =>
+            {
+              switch (arn.StateMachineName.ToLower())
+              {
+                case "test-machine": return EmbeddedResources.ExampleMachine;
+
+                default:
+                  throw new Exception($"An unrecognized step function was requested: {arn.StateMachineName}");
+              }
+            },
             factory: provider.ToStepHandlerFactory(),
             impositions: new Impositions
             {
