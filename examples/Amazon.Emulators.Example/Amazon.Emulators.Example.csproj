@@ -8,7 +8,6 @@
   </PropertyGroup>
   <Import Project="../../Shared.props" />
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Amazon.Emulators.Dynamo\Amazon.Emulators.Dynamo.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Emulators.Lambda\Amazon.Emulators.Lambda.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Emulators.S3\Amazon.Emulators.S3.csproj" />
     <ProjectReference Include="..\..\src\Amazon.Emulators.SNS\Amazon.Emulators.SNS.csproj" />

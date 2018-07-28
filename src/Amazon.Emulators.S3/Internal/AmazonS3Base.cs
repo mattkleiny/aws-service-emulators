@@ -368,14 +368,14 @@ namespace Amazon.S3.Internal
       throw new NotSupportedException();
     }
 
-    public virtual Task<GetObjectResponse> GetObjectAsync(string bucketName, string key, CancellationToken cancellationToken = default)
+    public Task<GetObjectResponse> GetObjectAsync(string bucketName, string key, CancellationToken cancellationToken = default)
     {
-      throw new NotSupportedException();
+      return GetObjectAsync(new GetObjectRequest {BucketName = bucketName, Key = key}, cancellationToken);
     }
 
-    public virtual Task<GetObjectResponse> GetObjectAsync(string bucketName, string key, string versionId, CancellationToken cancellationToken = default)
+    public Task<GetObjectResponse> GetObjectAsync(string bucketName, string key, string versionId, CancellationToken cancellationToken = default)
     {
-      throw new NotSupportedException();
+      return GetObjectAsync(new GetObjectRequest {BucketName = bucketName, Key = key, VersionId = versionId}, cancellationToken);
     }
 
     public virtual Task<GetObjectResponse> GetObjectAsync(GetObjectRequest request, CancellationToken cancellationToken = default)

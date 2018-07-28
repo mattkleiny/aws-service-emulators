@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Threading;
+using System.IO;
 using System.Threading.Tasks;
 using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
 using Amazon.Lambda.Model;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Amazon.StepFunctions;
@@ -18,18 +20,21 @@ namespace Amazon.Emulators.Example.Handlers
 
     private readonly ILogger<ExampleHandlers> logger;
     private readonly IAmazonSQS               sqs;
+    private readonly IAmazonS3                s3;
     private readonly IAmazonLambda            lambda;
     private readonly IAmazonStepFunctions     stepFunctions;
 
-    public ExampleHandlers(ILogger<ExampleHandlers> logger, IAmazonSQS sqs, IAmazonLambda lambda, IAmazonStepFunctions stepFunctions)
+    public ExampleHandlers(ILogger<ExampleHandlers> logger, IAmazonSQS sqs, IAmazonS3 s3, IAmazonLambda lambda, IAmazonStepFunctions stepFunctions)
     {
       Check.NotNull(logger, nameof(logger));
       Check.NotNull(sqs, nameof(sqs));
+      Check.NotNull(s3, nameof(s3));
       Check.NotNull(lambda, nameof(lambda));
       Check.NotNull(stepFunctions, nameof(stepFunctions));
 
       this.logger        = logger;
       this.sqs           = sqs;
+      this.s3            = s3;
       this.lambda        = lambda;
       this.stepFunctions = stepFunctions;
     }
@@ -37,25 +42,65 @@ namespace Amazon.Emulators.Example.Handlers
     [LambdaFunction("entry-point")]
     public async Task<string> EntryPointAsync()
     {
-      await lambda.InvokeAsync(new InvokeRequest
+      var request = new PutObjectRequest
       {
-        FunctionName = "process-queue"
-      });
+        BucketName  = "payloads",
+        Key         = "input.txt",
+        ContentBody = "test1,test2,test3,test4,test5,test6,test7,test8,test9,test10"
+      };
+
+      logger.LogTrace("Writing payload to S3");
+
+      await s3.PutObjectAsync(request);
+
+      logger.LogTrace("Reading payload from S3");
+
+      var payload = await s3.GetObjectAsync(bucketName: "payloads", key: "input.txt");
+
+      using (var reader = new StreamReader(payload.ResponseStream))
+      {
+        logger.LogTrace("Invoking SQS producer");
+
+        await lambda.InvokeAsync(new InvokeRequest
+        {
+          FunctionName = "producer",
+          Payload      = await reader.ReadToEndAsync()
+        });
+
+        logger.LogTrace("Invoking SQS consumer");
+
+        await lambda.InvokeAsync(new InvokeRequest
+        {
+          FunctionName = "consumer"
+        });
+      }
 
       return "OK";
     }
 
-    [LambdaFunction("process-queue")]
-    public async Task<string> ProcessQueueAsync(CancellationToken cancellationToken = default)
+    [LambdaFunction("producer")]
+    public async Task<string> ProducerAsync(string input)
     {
-      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName, cancellationToken)).QueueUrl;
+      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName)).QueueUrl;
 
-      for (var i = 0; i < 100; i++)
+      foreach (var message in input.Split(','))
       {
-        await sqs.SendMessageAsync(queueUrl, "world", cancellationToken);
+        logger.LogTrace($"Sending message '{message}' to SQS at {queueUrl}");
+
+        await sqs.SendMessageAsync(queueUrl, message);
       }
 
-      while (!cancellationToken.IsCancellationRequested)
+      return "OK";
+    }
+
+    [LambdaFunction("consumer")]
+    public async Task<string> ConsumerAsync()
+    {
+      var queueUrl = (await sqs.GetQueueUrlAsync(QueueName)).QueueUrl;
+
+      logger.LogTrace("Running SQS consumer");
+
+      while (true)
       {
         var request = new ReceiveMessageRequest
         {
@@ -64,28 +109,30 @@ namespace Amazon.Emulators.Example.Handlers
           WaitTimeSeconds     = 5
         };
 
-        var batch = await sqs.ReceiveMessageAsync(request, cancellationToken);
+        var batch = await sqs.ReceiveMessageAsync(request);
         if (batch.Messages.Count == 0) break; // received an empty batch? go ahead and complete
+
+        logger.LogTrace($"Received {batch.Messages.Count} messages");
 
         foreach (var message in batch.Messages)
         {
-          var invocation = new InvokeRequest
+          logger.LogTrace($"Invoking step function lambda with body '{message.Body}'");
+
+          await lambda.InvokeAsync(new InvokeRequest
           {
             FunctionName = "launch-stepfunction",
             Payload      = message.Body
-          };
-
-          await lambda.InvokeAsync(invocation, cancellationToken);
+          });
         }
 
-        await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
+        await Task.Delay(TimeSpan.FromMilliseconds(100));
       }
 
       return "OK";
     }
 
     [LambdaFunction("launch-stepfunction")]
-    public async Task<string> LaunchStepFunctionAsync(string input, CancellationToken cancellationToken = default)
+    public async Task<string> LaunchStepFunctionAsync(string input)
     {
       var execution = new StartExecutionRequest
       {
@@ -94,9 +141,11 @@ namespace Amazon.Emulators.Example.Handlers
         Input           = input
       };
 
-      var response = await stepFunctions.StartExecutionAsync(execution, cancellationToken);
+      logger.LogTrace($"Starting execution with name {execution.Name}");
 
-      logger.LogInformation($"Started execution: {response.ExecutionArn}");
+      var response = await stepFunctions.StartExecutionAsync(execution);
+
+      logger.LogTrace($"Started execution: {response.ExecutionArn}");
 
       return "OK";
     }

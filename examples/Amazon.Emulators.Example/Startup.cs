@@ -48,7 +48,7 @@ namespace Amazon.Emulators.Example
 
         services.AddEmulator<IAmazonS3, AmazonS3Emulator>(
           provider => new AmazonS3Emulator(
-            factory: name => new InMemoryBucket(name)
+            factory: name => new FileSystemBucket(name, basePath: "./Buckets")
           )
         );
 
@@ -60,16 +60,7 @@ namespace Amazon.Emulators.Example
 
         services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
           provider => new AmazonStepFunctionsEmulator(
-            arn =>
-            {
-              switch (arn.StateMachineName.ToLower())
-              {
-                case "test-machine": return EmbeddedResources.TestMachine;
-
-                default:
-                  throw new Exception($"An unrecognized step function was requested: {arn.StateMachineName}");
-              }
-            },
+            resolver: arn => EmbeddedResources.TestMachine,
             factory: provider.ToStepHandlerFactory(),
             impositions: new Impositions {WaitTimeOverride = TimeSpan.FromMilliseconds(0)}
           )
