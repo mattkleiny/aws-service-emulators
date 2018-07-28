@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace Amazon.Emulators.Example
+namespace Amazon.Emulators.StepFunctions.Tests
 {
   internal static class EmbeddedResources
   {

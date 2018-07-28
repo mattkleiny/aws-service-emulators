@@ -8,15 +8,32 @@ using Amazon.StepFunctions.Model;
 namespace Amazon.StepFunctions.Internal
 {
   /// <summary>An <see cref="IAmazonStepFunctions"/> implementation that delegates directly to an <see cref="AmazonStepFunctionsEmulator"/>.</summary>
-  internal sealed class DelegatingAmazonStepFunctions : AmazonStepFunctionsBase
+  internal sealed class EmulatedAmazonStepFunctions : AmazonStepFunctionsBase
   {
     private readonly AmazonStepFunctionsEmulator emulator;
 
-    public DelegatingAmazonStepFunctions(AmazonStepFunctionsEmulator emulator)
+    public EmulatedAmazonStepFunctions(AmazonStepFunctionsEmulator emulator)
     {
       Check.NotNull(emulator, nameof(emulator));
 
       this.emulator = emulator;
+    }
+
+    public override Task<DescribeStateMachineResponse> DescribeStateMachineAsync(DescribeStateMachineRequest request, CancellationToken cancellationToken = new CancellationToken())
+    {
+      Check.NotNull(request, nameof(request));
+
+      var stateMachineARN = StateMachineARN.Parse(request.StateMachineArn);
+      var machine         = emulator.GetOrCreateStateMachine(stateMachineARN);
+
+      return Task.FromResult(new DescribeStateMachineResponse
+      {
+        StateMachineArn = machine.ARN.ToString(),
+        Definition      = emulator.GetSpecification(stateMachineARN),
+        Name            = stateMachineARN.StateMachineName,
+        Status          = StateMachineStatus.ACTIVE,
+        HttpStatusCode  = HttpStatusCode.OK
+      });
     }
 
     public override Task<StartExecutionResponse> StartExecutionAsync(StartExecutionRequest request, CancellationToken cancellationToken = default)
@@ -57,14 +74,7 @@ namespace Amazon.StepFunctions.Internal
       // TODO: what about the filters?
 
       var stateMachineArn = StateMachineARN.Parse(request.StateMachineArn);
-
-      if (!emulator.StateMachines.TryGetValue(stateMachineArn, out var machine))
-      {
-        return Task.FromResult(new ListExecutionsResponse
-        {
-          HttpStatusCode = HttpStatusCode.NotFound
-        });
-      }
+      var machine         = emulator.GetOrCreateStateMachine(stateMachineArn);
 
       return Task.FromResult(new ListExecutionsResponse
       {

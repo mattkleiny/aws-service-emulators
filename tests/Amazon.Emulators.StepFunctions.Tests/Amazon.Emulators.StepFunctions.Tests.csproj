@@ -3,8 +3,11 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <Import Project="../../Tests.props" />
   <ItemGroup>
     <ProjectReference Include="..\..\src\Amazon.Emulators.StepFunctions\Amazon.Emulators.StepFunctions.csproj" />
   </ItemGroup>
-  <Import Project="../../Tests.props" />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\*" />
+  </ItemGroup>
 </Project>

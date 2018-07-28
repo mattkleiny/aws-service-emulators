@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
 using Amazon.Emulators;
 using Amazon.StepFunction;
 using Amazon.StepFunctions.Internal;
@@ -34,13 +33,18 @@ namespace Amazon.StepFunctions
       this.factory     = factory;
       this.impositions = impositions;
 
-      Client = new DelegatingAmazonStepFunctions(this);
+      Client = new EmulatedAmazonStepFunctions(this);
     }
 
     public IAmazonStepFunctions Client { get; }
 
-    /// <summary>The <see cref="StateMachine"/>s managed by this emulator. </summary>
-    internal IReadOnlyDictionary<StateMachineARN, StateMachine> StateMachines => stateMachinesByArn;
+    /// <summary>Retrieves the raw specification for the given <see cref="StateMachineARN"/>.</summary>
+    internal string GetSpecification(StateMachineARN stateMachineARN)
+    {
+      Check.NotNull(stateMachineARN, nameof(stateMachineARN));
+
+      return resolver(stateMachineARN);
+    }
 
     /// <summary>Retrieves or creates the <see cref="StepFunctionHost"/> for the given <see cref="StateMachineARN"/>.</summary>
     internal StateMachine GetOrCreateStateMachine(StateMachineARN arn)
@@ -49,7 +53,7 @@ namespace Amazon.StepFunctions
 
       return stateMachinesByArn.GetOrAdd(arn, _ =>
       {
-        var specification = resolver(_);
+        var specification = GetSpecification(_);
         var host          = StepFunctionHost.FromJson(specification, factory);
 
         return new StateMachine(_, host, impositions);

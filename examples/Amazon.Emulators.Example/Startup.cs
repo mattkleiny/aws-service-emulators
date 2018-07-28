@@ -99,7 +99,7 @@ namespace Amazon.Emulators.Example
             {
               switch (arn.StateMachineName.ToLower())
               {
-                case "test-machine": return EmbeddedResources.ExampleMachine;
+                case "test-machine": return EmbeddedResources.TestMachine;
 
                 default:
                   throw new Exception($"An unrecognized step function was requested: {arn.StateMachineName}");
