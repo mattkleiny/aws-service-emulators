@@ -16,13 +16,15 @@ namespace Amazon.Emulators.Example.Handlers
 {
   public sealed class ExampleHandlers
   {
-    private const string QueueName = "test-queue";
+    private const string QueueName   = "test-queue";
+    private const string TestMachine = "arn:aws:states:ap-southeast-2:123456789:stateMachine:test-machine";
 
     private readonly ILogger<ExampleHandlers> logger;
-    private readonly IAmazonSQS               sqs;
-    private readonly IAmazonS3                s3;
-    private readonly IAmazonLambda            lambda;
-    private readonly IAmazonStepFunctions     stepFunctions;
+
+    private readonly IAmazonSQS           sqs;
+    private readonly IAmazonS3            s3;
+    private readonly IAmazonLambda        lambda;
+    private readonly IAmazonStepFunctions stepFunctions;
 
     public ExampleHandlers(ILogger<ExampleHandlers> logger, IAmazonSQS sqs, IAmazonS3 s3, IAmazonLambda lambda, IAmazonStepFunctions stepFunctions)
     {
@@ -137,7 +139,7 @@ namespace Amazon.Emulators.Example.Handlers
       var execution = new StartExecutionRequest
       {
         Name            = Guid.NewGuid().ToString(),
-        StateMachineArn = "arn:aws:states:ap-southeast-2:123456789:stateMachine:test-machine",
+        StateMachineArn = TestMachine,
         Input           = input
       };
 

@@ -23,14 +23,13 @@ namespace Amazon.StepFunctions.Internal
     {
       Check.NotNull(request, nameof(request));
 
-      var stateMachineARN = StateMachineARN.Parse(request.StateMachineArn);
-      var machine         = emulator.GetOrCreateStateMachine(stateMachineARN);
+      var machine = emulator.GetOrCreateStateMachine(request.StateMachineArn);
 
       return Task.FromResult(new DescribeStateMachineResponse
       {
         StateMachineArn = machine.ARN.ToString(),
-        Definition      = emulator.GetSpecification(stateMachineARN),
-        Name            = stateMachineARN.StateMachineName,
+        Name            = machine.ARN.StateMachineName,
+        Definition      = emulator.GetSpecification(request.StateMachineArn),
         Status          = StateMachineStatus.ACTIVE,
         HttpStatusCode  = HttpStatusCode.OK
       });
@@ -40,8 +39,7 @@ namespace Amazon.StepFunctions.Internal
     {
       Check.NotNull(request, nameof(request));
 
-      var stateMachineArn = StateMachineARN.Parse(request.StateMachineArn);
-      var executionArn    = emulator.ScheduleExecution(stateMachineArn, request.Name, request.Input);
+      var executionArn = emulator.ScheduleExecution(request.StateMachineArn, request.Name, request.Input);
 
       return Task.FromResult(new StartExecutionResponse
       {
@@ -73,8 +71,7 @@ namespace Amazon.StepFunctions.Internal
       // TODO: what about the pagination?
       // TODO: what about the filters?
 
-      var stateMachineArn = StateMachineARN.Parse(request.StateMachineArn);
-      var machine         = emulator.GetOrCreateStateMachine(stateMachineArn);
+      var machine = emulator.GetOrCreateStateMachine(request.StateMachineArn);
 
       return Task.FromResult(new ListExecutionsResponse
       {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.StepFunction;
@@ -8,7 +9,7 @@ namespace Amazon.StepFunctions.Model
   /// <summary>Models a state machine and records it's <see cref="Execution"/>s.</summary>
   internal sealed class StateMachine
   {
-    private readonly ConcurrentDictionary<ExecutionARN, Execution> executionsByArn = new ConcurrentDictionary<ExecutionARN, Execution>();
+    private readonly ConcurrentDictionary<string, Execution> executionsByArn = new ConcurrentDictionary<string, Execution>(StringComparer.OrdinalIgnoreCase);
 
     private readonly StepFunctionHost host;
     private readonly Impositions      impositions;
@@ -29,7 +30,7 @@ namespace Amazon.StepFunctions.Model
     public StateMachineARN ARN { get; }
 
     /// <summary>The <see cref="Execution"/>s that have occurred in this emulator.</summary>
-    public IReadOnlyDictionary<ExecutionARN, Execution> Executions => executionsByArn;
+    public IReadOnlyDictionary<string, Execution> Executions => executionsByArn;
 
     /// <summary>Starts the execution of the state machine with the given name and input.</summary>
     public ExecutionARN StartExecution(string executionName, object input)
@@ -43,14 +44,14 @@ namespace Amazon.StepFunctions.Model
         executionName
       );
 
-      executionsByArn.GetOrAdd(executionArn, _ =>
+      executionsByArn.GetOrAdd(executionArn.ToString(), _ =>
       {
         var task = Task.Factory.StartNew(
           () => host.ExecuteAsync(impositions, input).Result,
           TaskCreationOptions.LongRunning
         );
 
-        return new Execution(task, _);
+        return new Execution(task, executionArn);
       });
 
       return executionArn;

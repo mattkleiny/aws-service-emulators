@@ -60,9 +60,12 @@ namespace Amazon.Emulators.Example
 
         services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
           provider => new AmazonStepFunctionsEmulator(
-            resolver: arn => EmbeddedResources.TestMachine,
+            resolver: (region, id, name) => EmbeddedResources.TestMachine,
             factory: provider.ToStepHandlerFactory(),
-            impositions: new Impositions {WaitTimeOverride = TimeSpan.FromMilliseconds(0)}
+            impositions: new Impositions
+            {
+              WaitTimeOverride = TimeSpan.FromMilliseconds(0)
+            }
           )
         );
       }

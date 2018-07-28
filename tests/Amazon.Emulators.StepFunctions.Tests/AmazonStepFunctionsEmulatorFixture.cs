@@ -8,15 +8,15 @@ namespace Amazon.Emulators.StepFunctions.Tests
   public sealed class AmazonStepFunctionsEmulatorFixture
   {
     public AmazonStepFunctionsEmulator Emulator { get; } = new AmazonStepFunctionsEmulator(
-      resolver: arn =>
+      resolver: (region, id, name) =>
       {
-        switch (arn.StateMachineName.ToLower())
+        switch (name.ToLower())
         {
           case "test-machine":
             return EmbeddedResources.TestMachine;
 
           default:
-            throw new Exception($"An unrecognized state machine was requested: {arn}");
+            throw new Exception($"An unrecognized state machine was requested: {name}");
         }
       },
       factory: definition => ((input, cancellationtoken) => Task.FromResult(input))

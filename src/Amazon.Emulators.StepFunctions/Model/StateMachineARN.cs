@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Amazon.StepFunctions.Model
 {
   /// <summary>Encapsulates an ARN for an AWS state machine.</summary>
-  public sealed class StateMachineARN
+  internal sealed class StateMachineARN
   {
     private static readonly Regex Regex = new Regex(@"^arn:aws:states:([a-zA-Z0-9\-]+):([0-9]+):stateMachine:([a-zA-Z0-9\-]+)$");
 
