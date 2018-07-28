@@ -12,7 +12,6 @@ namespace Amazon.SQS.Model
   // TODO: support receipt handles
 
   /// <summary>An in-memory SQS <see cref="IQueue"/> implementation</summary>
-  /// <remarks>This implementation is thread-safe.</remarks>
   public sealed class InMemoryQueue : IQueue
   {
     private readonly ConcurrentQueue<QueuedMessage> messages = new ConcurrentQueue<QueuedMessage>();

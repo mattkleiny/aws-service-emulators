@@ -4,6 +4,8 @@ using Amazon.Emulators.Example.Handlers;
 using Amazon.Lambda;
 using Amazon.Lambda.Diagnostics;
 using Amazon.Lambda.Hosting;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Amazon.StepFunction;
@@ -44,6 +46,12 @@ namespace Amazon.Emulators.Example
           )
         );
 
+        services.AddEmulator<IAmazonS3, AmazonS3Emulator>(
+          provider => new AmazonS3Emulator(
+            factory: name => new InMemoryBucket(name)
+          )
+        );
+
         services.AddEmulator<IAmazonLambda, AmazonLambdaEmulator>(
           provider => new AmazonLambdaEmulator(
             resolver: provider.ToLambdaResolver()
@@ -70,6 +78,7 @@ namespace Amazon.Emulators.Example
       else
       {
         services.AddSQS();
+        services.AddS3();
         services.AddLambda();
         services.AddStepFunctions();
       }

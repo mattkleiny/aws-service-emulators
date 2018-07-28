@@ -31,8 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.Example", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.SNS", "src\Amazon.Emulators.SNS\Amazon.Emulators.SNS.csproj", "{717338F8-E7BE-491E-88CC-75E8D65C6C84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.Dynamo", "src\Amazon.Emulators.Dynamo\Amazon.Emulators.Dynamo.csproj", "{DDEDAB4E-A358-4C1D-BDDC-A87DEDB2AAAC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.SQS.Tests", "tests\Amazon.Emulators.SQS.Tests\Amazon.Emulators.SQS.Tests.csproj", "{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.Lambda", "src\Amazon.Emulators.Lambda\Amazon.Emulators.Lambda.csproj", "{FF8AC7B0-291A-463A-909F-11CC3BDBA281}"
@@ -76,10 +74,6 @@ Global
 		{717338F8-E7BE-491E-88CC-75E8D65C6C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{717338F8-E7BE-491E-88CC-75E8D65C6C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{717338F8-E7BE-491E-88CC-75E8D65C6C84}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDEDAB4E-A358-4C1D-BDDC-A87DEDB2AAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDEDAB4E-A358-4C1D-BDDC-A87DEDB2AAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDEDAB4E-A358-4C1D-BDDC-A87DEDB2AAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDEDAB4E-A358-4C1D-BDDC-A87DEDB2AAAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
