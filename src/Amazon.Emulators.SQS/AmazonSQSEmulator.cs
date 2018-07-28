@@ -13,22 +13,22 @@ namespace Amazon.SQS
 
     private readonly RegionEndpoint         endpoint;
     private readonly long                   accountId;
-    private readonly Func<QueueUrl, IQueue> queueFactory;
+    private readonly Func<QueueUrl, IQueue> factory;
 
     public AmazonSQSEmulator(RegionEndpoint endpoint, long accountId)
       : this(endpoint, accountId, url => new InMemoryQueue(url))
     {
     }
 
-    public AmazonSQSEmulator(RegionEndpoint endpoint, long accountId, Func<QueueUrl, IQueue> queueFactory)
+    public AmazonSQSEmulator(RegionEndpoint endpoint, long accountId, Func<QueueUrl, IQueue> factory)
     {
       Check.NotNull(endpoint, nameof(endpoint));
       Check.That(accountId > 0, "accountId > 0");
-      Check.NotNull(queueFactory, nameof(queueFactory));
+      Check.NotNull(factory, nameof(factory));
 
-      this.endpoint     = endpoint;
-      this.accountId    = accountId;
-      this.queueFactory = queueFactory;
+      this.endpoint  = endpoint;
+      this.accountId = accountId;
+      this.factory   = factory;
 
       Client = new DelegatingAmazonSQS(this);
     }
@@ -42,7 +42,7 @@ namespace Amazon.SQS
 
       var queueUrl = new QueueUrl(endpoint, accountId, name);
 
-      return queuesByUrl.GetOrAdd(queueUrl, queueFactory);
+      return queuesByUrl.GetOrAdd(queueUrl, factory);
     }
 
     /// <summary>Retrieves an existing <see cref="IQueue"/>, or creates a new one, given its <see cref="url"/>.</summary>
@@ -52,7 +52,7 @@ namespace Amazon.SQS
 
       var queueUrl = QueueUrl.Parse(url);
 
-      return queuesByUrl.GetOrAdd(queueUrl, queueFactory);
+      return queuesByUrl.GetOrAdd(queueUrl, factory);
     }
   }
 }

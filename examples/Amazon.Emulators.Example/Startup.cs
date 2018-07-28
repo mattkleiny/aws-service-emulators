@@ -54,7 +54,9 @@ namespace Amazon.Emulators.Example
             Input           = message.Body
           };
 
-          await stepFunctions.StartExecutionAsync(execution, cancellationToken);
+          var response = await stepFunctions.StartExecutionAsync(execution, cancellationToken);
+
+          Console.WriteLine($"Started execution: {response.ExecutionArn}");
         }
 
         await Task.Delay(TimeSpan.FromMilliseconds(100), cancellationToken);
@@ -80,7 +82,8 @@ namespace Amazon.Emulators.Example
         services.AddEmulator<IAmazonSQS, AmazonSQSEmulator>(
           provider => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
-            accountId: 123456789
+            accountId: 123456789,
+            factory: url => new InterProcessQueue(url)
           )
         );
 

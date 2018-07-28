@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Amazon.StepFunctions.Model
 {
-  /// <summary>Encapsulates a ARN for a state machine in AWS and encapsulates it's individual components.</summary>
+  /// <summary>Encapsulates an ARN for an AWS state machine.</summary>
   public sealed class StateMachineARN
   {
     private static readonly Regex Regex = new Regex(@"^arn:aws:states:([a-zA-Z0-9\-]+):([0-9]+):stateMachine:([a-zA-Z0-9\-]+)$");
@@ -15,7 +16,7 @@ namespace Amazon.StepFunctions.Model
       var match = Regex.Match(arn);
       if (!match.Success)
       {
-        throw new InvalidStateMachineARNException(arn);
+        throw new InvalidARNException(arn);
       }
 
       var region           = RegionEndpoint.GetBySystemName(match.Groups[1].Value);
@@ -48,8 +49,8 @@ namespace Amazon.StepFunctions.Model
     private bool Equals(StateMachineARN other)
     {
       return Equals(Region, other.Region) &&
-        AccountId == other.AccountId      &&
-        string.Equals(StateMachineName, other.StateMachineName);
+             AccountId == other.AccountId &&
+             string.Equals(StateMachineName, other.StateMachineName, StringComparison.OrdinalIgnoreCase);
     }
 
     public override bool Equals(object obj)
@@ -64,10 +65,10 @@ namespace Amazon.StepFunctions.Model
     {
       unchecked
       {
-        var hashCode = Region != null ? Region.GetHashCode() : 0;
+        var hashCode = Region.GetHashCode();
 
         hashCode = (hashCode * 397) ^ AccountId.GetHashCode();
-        hashCode = (hashCode * 397) ^ (StateMachineName != null ? StateMachineName.GetHashCode() : 0);
+        hashCode = (hashCode * 397) ^ StateMachineName.GetHashCode();
 
         return hashCode;
       }
