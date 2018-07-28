@@ -30,13 +30,13 @@ namespace Amazon.SQS
       this.accountId = accountId;
       this.factory   = factory;
 
-      Client = new DelegatingAmazonSQS(this);
+      Client = new EmulatedAmazonSQS(this);
     }
 
     public IAmazonSQS Client { get; }
 
     /// <summary>Retrieves an existing <see cref="IQueue"/>, or creates a new one, given its <see cref="name"/>.</summary>
-    public IQueue GetOrCreateByName(string name)
+    internal IQueue GetOrCreateByName(string name)
     {
       Check.NotNullOrEmpty(name, nameof(name));
 
@@ -46,7 +46,7 @@ namespace Amazon.SQS
     }
 
     /// <summary>Retrieves an existing <see cref="IQueue"/>, or creates a new one, given its <see cref="url"/>.</summary>
-    public IQueue GetOrCreateByUrl(string url)
+    internal IQueue GetOrCreateByUrl(string url)
     {
       Check.NotNullOrEmpty(url, nameof(url));
 

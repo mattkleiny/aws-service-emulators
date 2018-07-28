@@ -4,19 +4,20 @@ using Amazon.Lambda.Core;
 namespace Amazon.Lambda.Internal
 {
   /// <summary>A <see cref="ILambdaContext"/> for emulated execution.</summary>
-  internal sealed class EmulatedLambdaContext : ILambdaContext
+  internal sealed class LambdaContext : ILambdaContext
   {
-    public EmulatedLambdaContext(string functionName)
+    public LambdaContext(string functionName, string qualifier)
     {
       Check.NotNullOrEmpty(functionName, nameof(functionName));
 
-      FunctionName = functionName;
+      FunctionName    = functionName;
+      FunctionVersion = qualifier ?? "$LATEST";
     }
 
     public string           AwsRequestId       { get; } = Guid.NewGuid().ToString();
     public IClientContext   ClientContext      { get; } = null;
     public string           FunctionName       { get; }
-    public string           FunctionVersion    { get; } = "$LATEST";
+    public string           FunctionVersion    { get; }
     public ICognitoIdentity Identity           { get; } = null;
     public string           InvokedFunctionArn { get; } = string.Empty;
     public ILambdaLogger    Logger             { get; } = null;

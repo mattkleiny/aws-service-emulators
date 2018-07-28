@@ -83,7 +83,10 @@ namespace Amazon.Emulators.Example
           provider => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
             accountId: 123456789,
-            factory: url => new InterProcessQueue(url)
+            factory: url => new InterProcessQueue(
+              channelName: "emulators-example",
+              queueUrl: url
+            )
           )
         );
 

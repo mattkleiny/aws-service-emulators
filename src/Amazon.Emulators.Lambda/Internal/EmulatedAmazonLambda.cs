@@ -11,13 +11,13 @@ namespace Amazon.Lambda.Internal
 {
   // TODO: support serialization to the right lambda parameter type
   // TODO: support invocation types
-
+  
   /// <summary>An <see cref="IAmazonLambda"/> implementation that delegates directly to an <see cref="AmazonLambdaEmulator"/>.</summary>
-  internal sealed class DelegatingAmazonLambda : AmazonLambdaBase
+  internal sealed class EmulatedAmazonLambda : AmazonLambdaBase
   {
     private readonly AmazonLambdaEmulator emulator;
 
-    public DelegatingAmazonLambda(AmazonLambdaEmulator emulator)
+    public EmulatedAmazonLambda(AmazonLambdaEmulator emulator)
     {
       Check.NotNull(emulator, nameof(emulator));
 
@@ -28,7 +28,7 @@ namespace Amazon.Lambda.Internal
     {
       Check.NotNull(request, nameof(request));
 
-      var context = new EmulatedLambdaContext(request.FunctionName);
+      var context = new LambdaContext(request.FunctionName, request.Qualifier);
 
       if (request.InvocationType == InvocationType.DryRun)
       {

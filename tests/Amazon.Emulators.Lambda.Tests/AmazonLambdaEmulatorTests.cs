@@ -17,7 +17,7 @@ namespace Amazon.Emulators.Lambda.Tests
     [Fact]
     public async Task it_should_execute_resolved_lambdas()
     {
-      var context = new EmulatedLambdaContext("test-handler");
+      var context = new LambdaContext("test-handler");
       var output  = await emulator.ExecuteLambdaAsync("test", context);
 
       Assert.Equal("TEST", output);

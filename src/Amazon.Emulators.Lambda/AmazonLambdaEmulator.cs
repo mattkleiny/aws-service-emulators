@@ -23,25 +23,25 @@ namespace Amazon.Lambda
 
       this.resolver = resolver;
 
-      Client = new DelegatingAmazonLambda(this);
+      Client = new EmulatedAmazonLambda(this);
     }
 
     public IAmazonLambda Client { get; }
 
-    /// <summary>Resolves a <see cref="LambdaHandler"/> for the given context.</summary>
-    public LambdaHandler ResolveHandler(object input, ILambdaContext context)
-    {
-      Check.NotNull(context, nameof(context));
-
-      return resolver(input, context);
-    }
-
     /// <summary>Resolves and executes a lambda for the given input and context.</summary>
-    public async Task<object> ExecuteLambdaAsync(object input, ILambdaContext context, CancellationToken cancellationToken = default)
+    internal async Task<object> ExecuteLambdaAsync(object input, ILambdaContext context, CancellationToken cancellationToken = default)
     {
       var handler = ResolveHandler(input, context);
 
       return await handler(input, context, cancellationToken);
+    }
+
+    /// <summary>Resolves a <see cref="LambdaHandler"/> for the given context.</summary>
+    internal LambdaHandler ResolveHandler(object input, ILambdaContext context)
+    {
+      Check.NotNull(context, nameof(context));
+
+      return resolver(input, context);
     }
   }
 }

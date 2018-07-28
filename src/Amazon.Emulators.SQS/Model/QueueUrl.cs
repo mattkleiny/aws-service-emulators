@@ -38,10 +38,7 @@ namespace Amazon.SQS.Model
     public long           AccountId { get; }
     public string         Name      { get; }
 
-    public override string ToString()
-    {
-      return string.Intern($"https://sqs.{Endpoint.SystemName}.amazonaws.com/{AccountId}/{Name}");
-    }
+    public override string ToString() => $"https://sqs.{Endpoint.SystemName}.amazonaws.com/{AccountId}/{Name}";
 
     private bool Equals(QueueUrl other)
     {

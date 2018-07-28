@@ -13,11 +13,11 @@ namespace Amazon.SQS.Internal
   // TODO: double check these response codes
 
   /// <summary>An <see cref="IAmazonSQS"/> implementation that delegates directly to an <see cref="AmazonSQSEmulator"/>.</summary>
-  internal sealed class DelegatingAmazonSQS : AmazonSQSBase
+  internal sealed class EmulatedAmazonSQS : AmazonSQSBase
   {
     private readonly AmazonSQSEmulator emulator;
 
-    public DelegatingAmazonSQS(AmazonSQSEmulator emulator)
+    public EmulatedAmazonSQS(AmazonSQSEmulator emulator)
     {
       Check.NotNull(emulator, nameof(emulator));
 

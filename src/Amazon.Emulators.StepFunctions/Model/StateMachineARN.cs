@@ -41,10 +41,7 @@ namespace Amazon.StepFunctions.Model
     public long           AccountId        { get; }
     public string         StateMachineName { get; }
 
-    public override string ToString()
-    {
-      return string.Intern($"arn:aws:states:{Region.SystemName}:{AccountId}:stateMachine:{StateMachineName}");
-    }
+    public override string ToString() => $"arn:aws:states:{Region.SystemName}:{AccountId}:stateMachine:{StateMachineName}";
 
     private bool Equals(StateMachineARN other)
     {

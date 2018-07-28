@@ -7,27 +7,28 @@ namespace Amazon.SQS.Model
   /// <remarks>This implementation is thread-safe.</remarks>
   public sealed class InterProcessQueue : IQueue, IDisposable
   {
-    private readonly InMemoryQueue  innerQueue;
-    private          TinyMessageBus messageBus;
+    private readonly TinyMessageBus messageBus;
 
-    public InterProcessQueue(QueueUrl queueUrl)
+    public InterProcessQueue(string channelName, QueueUrl queueUrl)
     {
+      Check.NotNullOrEmpty(channelName, nameof(channelName));
       Check.NotNull(queueUrl, nameof(queueUrl));
 
-      innerQueue = new InMemoryQueue(queueUrl);
-      messageBus = new TinyMessageBus(queueUrl.ToString());
+      Url = queueUrl;
+
+      messageBus = new TinyMessageBus($"{channelName}:{queueUrl}");
     }
 
-    public QueueUrl Url => innerQueue.Url;
+    public QueueUrl Url { get; }
 
     public long Enqueue(Message message)
     {
-      return innerQueue.Enqueue(message);
+      throw new NotImplementedException();
     }
 
     public Message[] Dequeue(int count)
     {
-      return innerQueue.Dequeue(count);
+      throw new NotImplementedException();
     }
 
     public void Dispose()
