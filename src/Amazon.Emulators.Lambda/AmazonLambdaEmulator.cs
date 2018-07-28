@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators;
 using Amazon.Lambda.Core;
@@ -28,20 +29,24 @@ namespace Amazon.Lambda
 
     public IAmazonLambda Client { get; }
 
-    /// <summary>Resolves and executes a lambda for the given input and context.</summary>
-    internal async Task<object> ExecuteLambdaAsync(object input, ILambdaContext context, CancellationToken cancellationToken = default)
-    {
-      var handler = ResolveHandler(input, context);
-
-      return await handler(input, context, cancellationToken);
-    }
-
     /// <summary>Resolves a <see cref="LambdaHandler"/> for the given context.</summary>
     internal LambdaHandler ResolveHandler(object input, ILambdaContext context)
     {
       Check.NotNull(context, nameof(context));
 
       return resolver(input, context);
+    }
+
+    /// <summary>Resolves and executes a lambda for the given input and context.</summary>
+    internal async Task<object> ExecuteLambdaAsync(object input, ILambdaContext context, CancellationToken cancellationToken = default)
+    {
+      var handler = ResolveHandler(input, context);
+
+      using (var timeoutSource = new CancellationTokenSource(context.RemainingTime))
+      using (var linkedSource = CancellationTokenSource.CreateLinkedTokenSource(timeoutSource.Token, cancellationToken))
+      {
+        return await handler(input, context, linkedSource.Token);
+      }
     }
   }
 }

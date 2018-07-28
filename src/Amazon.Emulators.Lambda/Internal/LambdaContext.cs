@@ -6,6 +6,11 @@ namespace Amazon.Lambda.Internal
   /// <summary>A <see cref="ILambdaContext"/> for emulated execution.</summary>
   internal sealed class LambdaContext : ILambdaContext
   {
+    public LambdaContext(string functionName)
+      : this(functionName, "$LATEST")
+    {
+    }
+
     public LambdaContext(string functionName, string qualifier)
     {
       Check.NotNullOrEmpty(functionName, nameof(functionName));
@@ -23,7 +28,7 @@ namespace Amazon.Lambda.Internal
     public ILambdaLogger    Logger             { get; } = null;
     public string           LogGroupName       { get; } = string.Empty;
     public string           LogStreamName      { get; } = string.Empty;
-    public int              MemoryLimitInMB    { get; } = int.MaxValue;
-    public TimeSpan         RemainingTime      { get; } = TimeSpan.MaxValue;
+    public int              MemoryLimitInMB    { get; } = 3000;                      // maximum mb in aws
+    public TimeSpan         RemainingTime      { get; } = TimeSpan.FromSeconds(300); // maximum time in aws
   }
 }

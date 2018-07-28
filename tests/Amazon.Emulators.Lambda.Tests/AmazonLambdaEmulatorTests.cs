@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Amazon.Lambda;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.Internal;
-using Amazon.Lambda.Model;
 using Xunit;
 
 namespace Amazon.Emulators.Lambda.Tests
