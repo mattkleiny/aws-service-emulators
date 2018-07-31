@@ -10,8 +10,7 @@ using Newtonsoft.Json;
 namespace Amazon.Lambda.Internal
 {
   // TODO: support serialization to the right lambda parameter type
-  // TODO: support invocation types
-  
+
   /// <summary>An <see cref="IAmazonLambda"/> implementation that delegates directly to an <see cref="AmazonLambdaEmulator"/>.</summary>
   internal sealed class EmulatedAmazonLambda : AmazonLambdaBase
   {
@@ -27,19 +26,40 @@ namespace Amazon.Lambda.Internal
     public override async Task<InvokeResponse> InvokeAsync(InvokeRequest request, CancellationToken cancellationToken = default)
     {
       Check.NotNull(request, nameof(request));
-
+ 
       var context = new LambdaContext(request.FunctionName, request.Qualifier);
 
+      // test invocation
       if (request.InvocationType == InvocationType.DryRun)
       {
-        throw new NotImplementedException();
+        var handler = emulator.ResolveHandler(request.Payload, context);
+
+        if (handler == null)
+        {
+          return new InvokeResponse
+          {
+            HttpStatusCode = HttpStatusCode.NotFound
+          };
+        }
+
+        return new InvokeResponse
+        {
+          HttpStatusCode = HttpStatusCode.OK
+        };
       }
 
+      // asynchronous invocation
       if (request.InvocationType == InvocationType.Event)
       {
-        throw new NotImplementedException();
+        emulator.ScheduleLambda(request.Payload, context);
+
+        return new InvokeResponse
+        {
+          HttpStatusCode = HttpStatusCode.Accepted
+        };
       }
 
+      // synchronous invocation / default handler
       if (request.InvocationType == InvocationType.RequestResponse || request.InvocationType == null)
       {
         var output = await emulator.ExecuteLambdaAsync(request.Payload, context, cancellationToken);

@@ -130,7 +130,7 @@ namespace Amazon.Emulators.Example.Handlers
         await Task.Delay(TimeSpan.FromMilliseconds(100));
       }
 
-      return "OK";
+      return "OK"; 
     }
 
     [LambdaFunction("launch-stepfunction")]

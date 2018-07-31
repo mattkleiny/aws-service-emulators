@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators;
 using Amazon.Lambda.Core;
@@ -47,6 +46,17 @@ namespace Amazon.Lambda
       {
         return await handler(input, context, linkedSource.Token);
       }
+    }
+
+    /// <summary>Schedules the execution of the lambda represented by the given <see cref="ILambdaContext"/>.</summary>
+    internal void ScheduleLambda(object input, ILambdaContext context)
+    {
+      Check.NotNull(context, nameof(context));
+
+      Task.Factory.StartNew(
+        () => ExecuteLambdaAsync(input, context).Result,
+        TaskCreationOptions.LongRunning
+      );
     }
   }
 }

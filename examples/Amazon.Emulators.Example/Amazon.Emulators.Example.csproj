@@ -15,14 +15,14 @@
     <ProjectReference Include="..\..\src\Amazon.Emulators.StepFunctions\Amazon.Emulators.StepFunctions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Runtime" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.Console" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.Dynamo" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.Lambda" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.S3" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.SNS" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.SQS" Version="1.0.0-CI00063" />
-    <PackageReference Include="Amazon.Lambda.Runtime.StepFunctions" Version="1.0.0-CI00063" />
+    <PackageReference Include="Amazon.Lambda.Runtime" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.Console" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.Dynamo" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.Lambda" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.S3" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.SNS" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.SQS" Version="1.0.0-CI00068" />
+    <PackageReference Include="Amazon.Lambda.Runtime.StepFunctions" Version="1.0.0-CI00068" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\*" />

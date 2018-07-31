@@ -7,7 +7,7 @@ using Amazon.StepFunctions.Model;
 
 namespace Amazon.StepFunctions
 {
-  /// <summary>Resolves the specification JSON for the given state machine ARN.</summary>
+  /// <summary>Resolves the specification JSON for the given state machine.</summary>
   public delegate string SpecificationResolver(RegionEndpoint region, long accountId, string stateMachineName);
 
   /// <summary>An emulator for Amazon's StepFunctions.</summary>

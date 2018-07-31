@@ -11,7 +11,7 @@ namespace Amazon.Emulators.StepFunctions.Tests.Internal
   {
     private const string TestMachineARN = "arn:aws:states:ap-southeast-2:123456789:stateMachine:test-machine";
 
-    public AmazonStepFunctionsEmulatorFixture Fixture { get; } = new AmazonStepFunctionsEmulatorFixture();
+    public EmulatorFixture Fixture { get; } = new EmulatorFixture();
 
     public AmazonStepFunctionsEmulator Emulator => Fixture.Emulator;
     public IAmazonStepFunctions        Client   => Emulator.Client;
