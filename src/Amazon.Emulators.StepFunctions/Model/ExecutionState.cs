@@ -1,4 +1,4 @@
-﻿namespace Amazon.StepFunctions.Model
+﻿namespace Amazon.StepFunction.Model
 {
   /// <summary>Encapsulates the possibles states for an <see cref="Execution"/>.</summary>
   internal enum ExecutionState

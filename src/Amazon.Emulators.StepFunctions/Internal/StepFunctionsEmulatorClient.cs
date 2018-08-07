@@ -3,16 +3,18 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Amazon.StepFunction.Model;
+using Amazon.StepFunctions;
 using Amazon.StepFunctions.Model;
 
-namespace Amazon.StepFunctions.Internal
+namespace Amazon.StepFunction.Internal
 {
   /// <summary>An <see cref="IAmazonStepFunctions"/> implementation that delegates directly to an <see cref="AmazonStepFunctionsEmulator"/>.</summary>
-  internal sealed class EmulatedAmazonStepFunctions : AmazonStepFunctionsBase
+  internal sealed class StepFunctionsEmulatorClient : AmazonStepFunctionsBase
   {
     private readonly AmazonStepFunctionsEmulator emulator;
 
-    public EmulatedAmazonStepFunctions(AmazonStepFunctionsEmulator emulator)
+    public StepFunctionsEmulatorClient(AmazonStepFunctionsEmulator emulator)
     {
       Check.NotNull(emulator, nameof(emulator));
 

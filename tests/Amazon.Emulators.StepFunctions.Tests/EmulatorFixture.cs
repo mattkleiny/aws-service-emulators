@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Amazon.StepFunction;
 using Amazon.StepFunctions;
 
 namespace Amazon.Emulators.StepFunctions.Tests

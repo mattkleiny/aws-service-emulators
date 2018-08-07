@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Amazon.Emulators;
-using Amazon.StepFunction;
 using Amazon.StepFunction.Hosting;
-using Amazon.StepFunctions.Internal;
-using Amazon.StepFunctions.Model;
+using Amazon.StepFunction.Internal;
+using Amazon.StepFunction.Model;
+using Amazon.StepFunctions;
 
-namespace Amazon.StepFunctions
+namespace Amazon.StepFunction
 {
   /// <summary>Resolves the specification JSON for the given state machine.</summary>
   public delegate string SpecificationResolver(RegionEndpoint region, long accountId, string stateMachineName);
@@ -35,7 +35,7 @@ namespace Amazon.StepFunctions
       this.factory     = factory;
       this.impositions = impositions;
 
-      Client = new EmulatedAmazonStepFunctions(this);
+      Client = new StepFunctionsEmulatorClient(this);
     }
 
     public IAmazonStepFunctions Client { get; }

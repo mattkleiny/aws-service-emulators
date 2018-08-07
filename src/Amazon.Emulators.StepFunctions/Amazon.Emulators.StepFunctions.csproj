@@ -2,14 +2,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>An emulator for Step Functions</Description>
-    <RootNamespace>Amazon.StepFunctions</RootNamespace>
+    <RootNamespace>Amazon.StepFunction</RootNamespace>
   </PropertyGroup>
   <Import Project="../../Shared.props" />
   <ItemGroup>
     <ProjectReference Include="..\Amazon.Emulators\Amazon.Emulators.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.StepFunction.Hosting" Version="1.0.0-CI00000" />
+    <PackageReference Include="Amazon.StepFunction.Hosting" Version="1.0.0-CI00002" />
     <PackageReference Include="AWSSDK.StepFunctions" Version="3.3.2.9" />
   </ItemGroup>
 </Project>

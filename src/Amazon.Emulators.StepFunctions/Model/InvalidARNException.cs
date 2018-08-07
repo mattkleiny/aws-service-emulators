@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Amazon.StepFunctions.Model
+namespace Amazon.StepFunction.Model
 {
   internal sealed class InvalidARNException : Exception
   {

@@ -2,10 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Amazon.StepFunction;
 using Amazon.StepFunction.Hosting;
 
-namespace Amazon.StepFunctions.Model
+namespace Amazon.StepFunction.Model
 {
   /// <summary>Models a state machine and records it's <see cref="Execution"/>s.</summary>
   internal sealed class StateMachine
@@ -45,15 +44,18 @@ namespace Amazon.StepFunctions.Model
         executionName
       );
 
-      executionsByArn.GetOrAdd(executionArn.ToString(), _ =>
-      {
-        var task = Task.Factory.StartNew(
-          () => host.ExecuteAsync(impositions, input).Result,
-          TaskCreationOptions.LongRunning
-        );
+      executionsByArn.AddOrUpdate(executionArn.ToString(),
+        addValueFactory: _ =>
+        {
+          var task = Task.Factory.StartNew(
+            () => host.ExecuteAsync(impositions, input).Result,
+            TaskCreationOptions.LongRunning
+          );
 
-        return new Execution(task, executionArn);
-      });
+          return new Execution(task, executionArn);
+        },
+        updateValueFactory: (name, existing) => throw new InvalidOperationException($"The given execution name '{executionName}' already exists.")
+      );
 
       return executionArn;
     }

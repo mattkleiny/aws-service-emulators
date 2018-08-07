@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Amazon.StepFunction;
 using Amazon.StepFunctions;
 using Amazon.StepFunctions.Model;
 using Xunit;

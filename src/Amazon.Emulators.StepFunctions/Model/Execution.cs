@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Amazon.StepFunction;
 using Amazon.StepFunction.Hosting;
 
-namespace Amazon.StepFunctions.Model
+namespace Amazon.StepFunction.Model
 {
   /// <summary>Encapsulates an execution that has occurred in this emulator.</summary>
   internal sealed class Execution
