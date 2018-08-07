@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using Amazon.Emulators;
 using Amazon.StepFunction;
+using Amazon.StepFunction.Hosting;
 using Amazon.StepFunctions.Internal;
 using Amazon.StepFunctions.Model;
 

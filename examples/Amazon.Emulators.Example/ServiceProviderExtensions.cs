@@ -1,7 +1,7 @@
 ﻿using System;
 using Amazon.Lambda;
 using Amazon.Lambda.Hosting;
-using Amazon.StepFunction;
+using Amazon.StepFunction.Hosting;
 
 namespace Amazon.Emulators.Example
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Amazon.StepFunction;
+using Amazon.StepFunction.Hosting;
 
 namespace Amazon.StepFunctions.Model
 {
