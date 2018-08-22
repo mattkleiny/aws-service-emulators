@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 namespace Amazon.Emulators.Workers
 {
   /// <summary>Permits dispatching of <see cref="NotifyingBackgroundService.Notification"/>s to listeners. </summary>
-  public delegate Task NotificationDispatcher(NotifyingBackgroundService.Notification notification, CancellationToken cancellationToken = default);
+  public delegate Task NotificationDispatcher(object payload, CancellationToken cancellationToken = default);
 
   /// <summary>A <see cref="BackgroundServiceBase"/> that supports a notification process.</summary>
   public abstract class NotifyingBackgroundService : BackgroundServiceBase
   {
     private readonly BlockingCollection<Notification> notifications = new BlockingCollection<Notification>();
     private readonly NotificationDispatcher           dispatcher;
+
+    private long sequence;
 
     protected NotifyingBackgroundService(NotificationDispatcher dispatcher)
     {
@@ -21,28 +23,32 @@ namespace Amazon.Emulators.Workers
       this.dispatcher = dispatcher;
     }
 
-    /// <summary>Enqueues a <see cref="Notification"/> for dispatch.</summary>
-    protected void EnqueueNotification(Notification notification)
+    /// <summary>Enqueues a notification for dispatch.</summary>
+    protected void Enqueue(object payload)
     {
-      Check.NotNull(notification, nameof(notification));
+      Check.NotNull(payload, nameof(payload));
 
-      notifications.Add(notification);
+      notifications.Add(new Notification
+      {
+        Id       = Interlocked.Increment(ref sequence),
+        SendTime = DateTime.Now,
+        Payload  = payload
+      });
     }
 
     protected sealed override async Task WorkAsync(CancellationToken cancellationToken)
     {
-      while (!cancellationToken.IsCancellationRequested)
+      foreach (var notification in notifications.GetConsumingEnumerable(cancellationToken))
       {
-        var notification = notifications.Take(cancellationToken);
-
-        await dispatcher(notification, cancellationToken);
+        await dispatcher(notification.Payload, cancellationToken);
       }
     }
 
     /// <summary>Encapsulates a notification to be dispatched by the service.</summary>
-    public sealed class Notification
+    private sealed class Notification
     {
-      public DateTime SendTime { get; } = DateTime.Now;
+      public long     Id       { get; set; }
+      public DateTime SendTime { get; set; }
       public object   Payload  { get; set; }
     }
   }
