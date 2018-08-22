@@ -48,7 +48,8 @@ namespace Amazon.SQS.Internal
       throw new NotSupportedException();
     }
 
-    public virtual Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(string queueUrl, List<ChangeMessageVisibilityBatchRequestEntry> entries, CancellationToken cancellationToken = default)
+    public virtual Task<ChangeMessageVisibilityBatchResponse> ChangeMessageVisibilityBatchAsync(string queueUrl, List<ChangeMessageVisibilityBatchRequestEntry> entries,
+      CancellationToken                                                                                cancellationToken = default)
     {
       throw new NotSupportedException();
     }
@@ -98,9 +99,15 @@ namespace Amazon.SQS.Internal
       throw new NotSupportedException();
     }
 
-    public virtual Task<GetQueueAttributesResponse> GetQueueAttributesAsync(string queueUrl, List<string> attributeNames, CancellationToken cancellationToken = default)
+    public Task<GetQueueAttributesResponse> GetQueueAttributesAsync(string queueUrl, List<string> attributeNames, CancellationToken cancellationToken = default)
     {
-      throw new NotSupportedException();
+      var request = new GetQueueAttributesRequest
+      {
+        QueueUrl       = queueUrl,
+        AttributeNames = attributeNames,
+      };
+
+      return GetQueueAttributesAsync(request, cancellationToken);
     }
 
     public virtual Task<GetQueueAttributesResponse> GetQueueAttributesAsync(GetQueueAttributesRequest request, CancellationToken cancellationToken = default)
@@ -153,7 +160,7 @@ namespace Amazon.SQS.Internal
     public Task<ReceiveMessageResponse> ReceiveMessageAsync(string queueUrl, CancellationToken cancellationToken = default)
     {
       Check.NotNullOrEmpty(queueUrl, nameof(queueUrl));
-      
+
       return ReceiveMessageAsync(new ReceiveMessageRequest(queueUrl), cancellationToken);
     }
 
@@ -174,7 +181,7 @@ namespace Amazon.SQS.Internal
 
     public Task<SendMessageResponse> SendMessageAsync(string queueUrl, string messageBody, CancellationToken cancellationToken = default)
     {
-      Check.NotNullOrEmpty(queueUrl, nameof(queueUrl));
+      Check.NotNullOrEmpty(queueUrl,    nameof(queueUrl));
       Check.NotNullOrEmpty(messageBody, nameof(messageBody));
 
       return SendMessageAsync(new SendMessageRequest(queueUrl, messageBody), cancellationToken);

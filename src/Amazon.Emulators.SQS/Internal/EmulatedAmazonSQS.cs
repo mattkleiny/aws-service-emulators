@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.SQS.Model;
-using Newtonsoft.Json;
 
 namespace Amazon.SQS.Internal
 {
@@ -45,22 +43,18 @@ namespace Amazon.SQS.Internal
 
       var message = new Message
       {
-        MessageId              = Guid.NewGuid().ToString(),
-        Body                   = request.MessageBody,
-        Attributes             = request.MessageAttributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.StringValue),
-        MD5OfBody              = CalculateMD5(request.MessageBody),
-        MD5OfMessageAttributes = CalculateMD5(request.MessageAttributes)
+        MessageId  = Guid.NewGuid().ToString(),
+        Body       = request.MessageBody,
+        Attributes = request.MessageAttributes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.StringValue)
       };
 
       var sequenceNumber = queue.Enqueue(message);
 
       return Task.FromResult(new SendMessageResponse
       {
-        SequenceNumber         = sequenceNumber.ToString(),
-        MessageId              = message.MessageId,
-        MD5OfMessageBody       = message.MD5OfBody,
-        MD5OfMessageAttributes = message.MD5OfMessageAttributes,
-        HttpStatusCode         = HttpStatusCode.OK
+        SequenceNumber = sequenceNumber.ToString(),
+        MessageId      = message.MessageId,
+        HttpStatusCode = HttpStatusCode.OK
       });
     }
 
@@ -80,31 +74,20 @@ namespace Amazon.SQS.Internal
       });
     }
 
-    /// <summary>Converts the given object to JSON and calculates it's MD5 hash.</summary>
-    private static string CalculateMD5(object input)
+    public override Task<GetQueueAttributesResponse> GetQueueAttributesAsync(GetQueueAttributesRequest request, CancellationToken cancellationToken = default)
     {
-      var json = JsonConvert.SerializeObject(input);
+      Check.NotNull(request, nameof(request));
 
-      return CalculateMD5(json);
-    }
+      var queue = emulator.GetOrCreateByUrl(request.QueueUrl);
 
-    /// <summary>Calculates the MD5 hash of the given string.</summary>
-    private static string CalculateMD5(string input)
-    {
-      using (var md5 = MD5.Create())
+      return Task.FromResult(new GetQueueAttributesResponse
       {
-        var bytes = Encoding.ASCII.GetBytes(input);
-        var hash  = md5.ComputeHash(bytes);
-
-        var builder = new StringBuilder();
-
-        for (var i = 0; i < hash.Length; i++)
+        HttpStatusCode = HttpStatusCode.OK,
+        Attributes = new Dictionary<string, string>
         {
-          builder.Append(hash[i].ToString("x2"));
+          [nameof(GetQueueAttributesResponse.ApproximateNumberOfMessages)] = queue.Count.ToString()
         }
-
-        return builder.ToString();
-      }
+      });
     }
   }
 }

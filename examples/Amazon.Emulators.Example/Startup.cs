@@ -8,7 +8,6 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
-using Amazon.StepFunction;
 using Amazon.StepFunction.Hosting;
 using Amazon.StepFunctions;
 using JetBrains.Annotations;
@@ -62,10 +61,7 @@ namespace Amazon.Emulators.Example
           provider => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
             accountId: 123456789,
-            factory: url => new InterProcessQueue(
-              channelName: "aws-emulator-example",
-              innerQueue: new InMemoryQueue(url)
-            )
+            factory: url => new FileSystemQueue(url, basePath: "./queues")
           )
         );
 

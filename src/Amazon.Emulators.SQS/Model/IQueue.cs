@@ -3,6 +3,9 @@ namespace Amazon.SQS.Model
   /// <summary>Represents a queue of <see cref="Message"/>s for use in our embedded SQS implementation.</summary>
   public interface IQueue
   {
+    /// <summary>The number of items in the queue.</summary>
+    int Count { get; }
+
     /// <summary>The <see cref="QueueUrl"/> of this queue.</summary>
     QueueUrl Url { get; }
 

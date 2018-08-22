@@ -5,17 +5,18 @@ namespace Amazon.SQS.Model
   /// <summary>A <see cref="IQueue"/> implemented on the local file system.</summary>
   public sealed class FileSystemQueue : IQueue
   {
-    public FileSystemQueue(QueueUrl url, string rootPath)
+    public FileSystemQueue(QueueUrl url, string basePath)
     {
       Check.NotNull(url, nameof(url));
-      Check.NotNullOrEmpty(rootPath, nameof(rootPath));
+      Check.NotNullOrEmpty(basePath, nameof(basePath));
 
       Url      = url;
-      RootPath = rootPath;
+      BasePath = basePath;
     }
 
+    public int      Count    { get; }
     public QueueUrl Url      { get; }
-    public string   RootPath { get; }
+    public string   BasePath { get; }
 
     public long Enqueue(Message message)
     {

@@ -10,6 +10,5 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.SQS" Version="3.3.3.11" />
-    <PackageReference Include="TinyIpc" Version="1.0.1" />
   </ItemGroup>
 </Project>
