@@ -17,7 +17,7 @@ namespace Amazon.SQS.Model
 
       if (!match.Success)
       {
-        throw new InvalidQueueUrlException(url);
+        throw new Exception($"{url} is not a valid SQS queue url");
       }
 
       var region    = RegionEndpoint.GetBySystemName(match.Groups[1].Value);
