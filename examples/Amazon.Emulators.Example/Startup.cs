@@ -61,7 +61,11 @@ namespace Amazon.Emulators.Example
           provider => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
             accountId: 123456789,
-            factory: url => new FileSystemQueue(url, basePath: "./queues")
+            factory: url => new FileSystemQueue(url, basePath: "./Queues")
+            {
+              DeliveryTimeout   = TimeSpan.FromSeconds(2),
+              VisibilityTimeout = TimeSpan.FromSeconds(5)
+            }
           )
         );
 

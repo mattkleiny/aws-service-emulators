@@ -1,5 +1,6 @@
 .idea/
 examples/Amazon.Emulators.Example/Buckets/
+examples/Amazon.Emulators.Example/Queues/
 
 ### VisualStudio template
 ## Ignore Visual Studio temporary files, build results, and

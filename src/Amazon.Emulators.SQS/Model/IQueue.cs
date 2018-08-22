@@ -15,7 +15,10 @@ namespace Amazon.SQS.Model
     /// <summary>Enqueues the given message and returns it's sequence number.</summary>
     long Enqueue(Message message);
 
-    /// <summary>Dequeues a batch of up to <see cref="count"/> messages.</summary>
-    Message[] Dequeue(int count);
+    /// <summary>Dequeues a single item from the queue.</summary>
+    bool TryDequeue(out Message message);
+
+    /// <summary>Deletes an item from the queue with the given handle.</summary>
+    void Delete(string handle);
   }
 }

@@ -69,9 +69,9 @@ namespace Amazon.SQS.Internal
       throw new NotSupportedException();
     }
 
-    public virtual Task<DeleteMessageResponse> DeleteMessageAsync(string queueUrl, string receiptHandle, CancellationToken cancellationToken = default)
+    public Task<DeleteMessageResponse> DeleteMessageAsync(string queueUrl, string receiptHandle, CancellationToken cancellationToken = default)
     {
-      throw new NotSupportedException();
+      return DeleteMessageAsync(new DeleteMessageRequest(queueUrl, receiptHandle), cancellationToken);
     }
 
     public virtual Task<DeleteMessageResponse> DeleteMessageAsync(DeleteMessageRequest request, CancellationToken cancellationToken = default)
@@ -181,7 +181,7 @@ namespace Amazon.SQS.Internal
 
     public Task<SendMessageResponse> SendMessageAsync(string queueUrl, string messageBody, CancellationToken cancellationToken = default)
     {
-      Check.NotNullOrEmpty(queueUrl,    nameof(queueUrl));
+      Check.NotNullOrEmpty(queueUrl, nameof(queueUrl));
       Check.NotNullOrEmpty(messageBody, nameof(messageBody));
 
       return SendMessageAsync(new SendMessageRequest(queueUrl, messageBody), cancellationToken);

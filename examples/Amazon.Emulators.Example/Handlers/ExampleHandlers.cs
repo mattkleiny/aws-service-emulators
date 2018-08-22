@@ -112,9 +112,6 @@ namespace Amazon.Emulators.Example.Handlers
         };
 
         var batch = await sqs.ReceiveMessageAsync(request);
-        if (batch.Messages.Count == 0) break; // received an empty batch? go ahead and complete
-
-        logger.LogTrace($"Received {batch.Messages.Count} messages");
 
         foreach (var message in batch.Messages)
         {
@@ -125,12 +122,12 @@ namespace Amazon.Emulators.Example.Handlers
             FunctionName = "launch-stepfunction",
             Payload      = message.Body
           });
+
+          await sqs.DeleteMessageAsync(queueUrl, message.ReceiptHandle);
         }
 
-        await Task.Delay(TimeSpan.FromMilliseconds(100));
+        await Task.Delay(TimeSpan.FromSeconds(1));
       }
-
-      return "OK"; 
     }
 
     [LambdaFunction("launch-stepfunction")]

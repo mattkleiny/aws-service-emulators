@@ -62,14 +62,31 @@ namespace Amazon.SQS.Internal
     {
       Check.NotNull(request, nameof(request));
 
-      // TODO: support receipt handles (perhaps use an intermediate struct?)
-
       var queue    = emulator.GetOrCreateByUrl(request.QueueUrl);
-      var messages = queue.Dequeue(request.MaxNumberOfMessages);
+      var messages = new List<Message>(request.MaxNumberOfMessages);
+
+      while (queue.TryDequeue(out var message) && messages.Count < request.MaxNumberOfMessages)
+      {
+        messages.Add(message);
+      }
 
       return Task.FromResult(new ReceiveMessageResponse
       {
         Messages       = messages.ToList(),
+        HttpStatusCode = HttpStatusCode.OK
+      });
+    }
+
+    public override Task<DeleteMessageResponse> DeleteMessageAsync(DeleteMessageRequest request, CancellationToken cancellationToken = default)
+    {
+      Check.NotNull(request, nameof(request));
+
+      var queue = emulator.GetOrCreateByUrl(request.QueueUrl);
+
+      queue.Delete(request.ReceiptHandle);
+
+      return Task.FromResult(new DeleteMessageResponse
+      {
         HttpStatusCode = HttpStatusCode.OK
       });
     }

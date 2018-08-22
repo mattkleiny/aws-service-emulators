@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using Amazon.Emulators;
 using Amazon.SQS.Internal;
 using Amazon.SQS.Model;
