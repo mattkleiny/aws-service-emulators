@@ -85,7 +85,7 @@ namespace Amazon.SQS.Internal
         HttpStatusCode = HttpStatusCode.OK,
         Attributes = new Dictionary<string, string>
         {
-          [nameof(GetQueueAttributesResponse.ApproximateNumberOfMessages)] = queue.Count.ToString()
+          [nameof(GetQueueAttributesResponse.ApproximateNumberOfMessages)] = queue.ReadyCount.ToString()
         }
       });
     }
