@@ -32,7 +32,7 @@ namespace Amazon.Lambda.Internal
       // test invocation
       if (request.InvocationType == InvocationType.DryRun)
       {
-        var handler = emulator.ResolveHandler(request.Payload, context);
+        var handler = emulator.ResolveHandler(context);
 
         if (handler == null)
         {

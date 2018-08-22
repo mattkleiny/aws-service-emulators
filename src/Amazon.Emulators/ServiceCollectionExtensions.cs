@@ -1,6 +1,7 @@
 ﻿using System;
 using Amazon.Runtime;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Amazon.Emulators
 {
@@ -22,6 +23,8 @@ namespace Amazon.Emulators
       where TClient : class, IAmazonService
       where TEmulator : class, IAmazonServiceEmulator<TClient>
     {
+      services.RemoveAll<TClient>();
+
       services.AddSingleton(emulatorFactory);
       services.AddSingleton(provider => provider.GetRequiredService<TEmulator>().Client);
 

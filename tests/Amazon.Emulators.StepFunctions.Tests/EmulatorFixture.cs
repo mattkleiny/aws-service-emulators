@@ -20,7 +20,7 @@ namespace Amazon.Emulators.StepFunctions.Tests
             throw new Exception($"An unrecognized state machine was requested: {name}");
         }
       },
-      factory: definition => ((input, cancellationtoken) => Task.FromResult(input))
+      factory: definition => ((data, cancellationtoken) => Task.FromResult(data.Value))
     );
   }
 }
