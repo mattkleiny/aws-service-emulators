@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>An emulator for Step Functions</Description>
-    <RootNamespace>Amazon.StepFunction</RootNamespace>
+    <RootNamespace>Amazon.StepFunctions</RootNamespace>
   </PropertyGroup>
   <Import Project="../../Shared.props" />
   <ItemGroup>

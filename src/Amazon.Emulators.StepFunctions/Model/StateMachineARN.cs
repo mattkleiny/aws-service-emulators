@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Amazon.StepFunction.Model
+namespace Amazon.StepFunctions.Model
 {
   /// <summary>Encapsulates an ARN for an AWS state machine.</summary>
   internal sealed class StateMachineARN

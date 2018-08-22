@@ -2,11 +2,10 @@
 using System.Collections.Concurrent;
 using Amazon.Emulators;
 using Amazon.StepFunction.Hosting;
-using Amazon.StepFunction.Internal;
-using Amazon.StepFunction.Model;
-using Amazon.StepFunctions;
+using Amazon.StepFunctions.Internal;
+using Amazon.StepFunctions.Model;
 
-namespace Amazon.StepFunction
+namespace Amazon.StepFunctions
 {
   /// <summary>Resolves the specification JSON for the given state machine.</summary>
   public delegate string SpecificationResolver(RegionEndpoint region, long accountId, string stateMachineName);

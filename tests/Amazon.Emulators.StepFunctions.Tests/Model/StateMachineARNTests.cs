@@ -1,5 +1,4 @@
-﻿using Amazon.StepFunction.Model;
-using Amazon.StepFunctions.Model;
+﻿using Amazon.StepFunctions.Model;
 using Xunit;
 
 namespace Amazon.Emulators.StepFunctions.Tests.Model

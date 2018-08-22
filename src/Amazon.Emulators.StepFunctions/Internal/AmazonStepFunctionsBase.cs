@@ -3,10 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.Emulators;
 using Amazon.Runtime;
-using Amazon.StepFunctions;
 using Amazon.StepFunctions.Model;
 
-namespace Amazon.StepFunction.Internal
+namespace Amazon.StepFunctions.Internal
 {
   /// <summary>Base class for any <see cref="IAmazonStepFunctions"/> implementations, to help separate plumbing from intent.</summary>
   internal abstract class AmazonStepFunctionsBase : IAmazonStepFunctions

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.StepFunction.Hosting;
 
-namespace Amazon.StepFunction.Model
+namespace Amazon.StepFunctions.Model
 {
   /// <summary>Models a state machine and records it's <see cref="Execution"/>s.</summary>
   internal sealed class StateMachine
