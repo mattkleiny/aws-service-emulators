@@ -15,14 +15,14 @@
     <ProjectReference Include="..\..\src\Amazon.Emulators.StepFunctions\Amazon.Emulators.StepFunctions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.Lambda.Hosting" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.Console" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.Dynamo" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.Lambda" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.S3" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.SNS" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.SQS" Version="1.0.0-CI00013" />
-    <PackageReference Include="Amazon.Lambda.Hosting.StepFunctions" Version="1.0.0-CI00013" />
+    <PackageReference Include="Amazon.Lambda.Hosting" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.Console" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.Dynamo" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.Lambda" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.S3" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.SNS" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.SQS" Version="1.0.0-CI00018" />
+    <PackageReference Include="Amazon.Lambda.Hosting.StepFunctions" Version="1.0.0-CI00018" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
   </ItemGroup>

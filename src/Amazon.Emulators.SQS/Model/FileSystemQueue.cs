@@ -44,9 +44,9 @@ namespace Amazon.SQS.Model
 
     public string BasePath { get; }
 
-    public string WaitingPath  { get; }
-    public string ReadyPath    { get; }
-    public string InFlightPath { get; }
+    private string WaitingPath  { get; }
+    private string ReadyPath    { get; }
+    private string InFlightPath { get; }
 
     public TimeSpan DeliveryTimeout   { get; set; } = TimeSpan.Zero;
     public TimeSpan VisibilityTimeout { get; set; } = TimeSpan.MaxValue;
@@ -122,7 +122,7 @@ namespace Amazon.SQS.Model
       lock (semaphore)
       {
         // try and delete either from in-flight or directly out of ready
-        DeleteIfExists(Path.Combine(ReadyPath, handle));
+        DeleteIfExists(Path.Combine(ReadyPath,    handle));
         DeleteIfExists(Path.Combine(InFlightPath, handle));
       }
     }
@@ -145,7 +145,7 @@ namespace Amazon.SQS.Model
       {
         lock (semaphore)
         {
-          ScanAndTransitionOldMessages(from: WaitingPath, to: ReadyPath, DeliveryTimeout);
+          ScanAndTransitionOldMessages(from: WaitingPath,  to: ReadyPath, DeliveryTimeout);
           ScanAndTransitionOldMessages(from: InFlightPath, to: ReadyPath, VisibilityTimeout);
         }
 

@@ -25,7 +25,7 @@ namespace Amazon.Emulators.Example
       {
         var environment = context.HostingEnvironment.EnvironmentName;
 
-        builder.AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true);
+        builder.AddJsonFile(path: "appsettings.json",                optional: true, reloadOnChange: true);
         builder.AddJsonFile(path: $"appsettings.{environment}.json", optional: true, reloadOnChange: true);
 
         builder.AddEnvironmentVariables();
@@ -63,7 +63,6 @@ namespace Amazon.Emulators.Example
             accountId: 123456789,
             factory: url => new FileSystemQueue(url, basePath: "./Queues")
             {
-              DeliveryTimeout   = TimeSpan.FromSeconds(2),
               VisibilityTimeout = TimeSpan.FromSeconds(5)
             }
           )
