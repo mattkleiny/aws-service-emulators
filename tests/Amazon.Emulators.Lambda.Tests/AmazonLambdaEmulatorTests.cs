@@ -9,7 +9,7 @@ namespace Amazon.Emulators.Lambda.Tests
 {
   public class AmazonLambdaEmulatorTests
   {
-    private readonly AmazonLambdaEmulator emulator = new AmazonLambdaEmulator(resolver: context => TestHandler);
+    private readonly AmazonLambdaEmulator emulator = new(resolver: _ => TestHandler);
 
     [Fact]
     public async Task it_should_execute_resolved_lambdas()

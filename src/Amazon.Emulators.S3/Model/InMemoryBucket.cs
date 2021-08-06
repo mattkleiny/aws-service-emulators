@@ -7,7 +7,7 @@ namespace Amazon.S3.Model
   /// <summary>A <see cref="IBucket"/> that is stored in-memory.</summary>
   public sealed class InMemoryBucket : IBucket
   {
-    private readonly ConcurrentDictionary<string, Entry> entries = new ConcurrentDictionary<string, Entry>(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, Entry> entries = new(StringComparer.OrdinalIgnoreCase);
 
     public InMemoryBucket(string name)
     {

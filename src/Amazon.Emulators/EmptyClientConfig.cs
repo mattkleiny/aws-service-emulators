@@ -6,38 +6,38 @@ namespace Amazon.Emulators
 {
   public sealed class EmptyClientConfig : IClientConfig
   {
-    public static readonly EmptyClientConfig Instance = new EmptyClientConfig();
+    public static readonly EmptyClientConfig Instance = new();
 
-    public RegionEndpoint   RegionEndpoint            { get; } = RegionEndpoint.APSoutheast2;
-    public string           RegionEndpointServiceName { get; } = string.Empty;
-    public string           ServiceURL                { get; } = string.Empty;
-    public bool             UseHttp                   { get; } = true;
-    public string           ServiceVersion            { get; } = string.Empty;
-    public SigningAlgorithm SignatureMethod           { get; } = SigningAlgorithm.HmacSHA256;
-    public string           SignatureVersion          { get; } = string.Empty;
-    public string           AuthenticationRegion      { get; } = string.Empty;
-    public string           AuthenticationServiceName { get; } = string.Empty;
-    public string           UserAgent                 { get; } = string.Empty;
-    public bool             DisableLogging            { get; } = false;
-    public bool             LogMetrics                { get; } = false;
-    public bool             LogResponse               { get; } = false;
-    public bool             ReadEntireResponse        { get; } = false;
-    public bool             AllowAutoRedirect         { get; } = false;
-    public int              BufferSize                { get; } = 0;
-    public int              MaxErrorRetry             { get; } = 0;
-    public long             ProgressUpdateInterval    { get; } = 0;
-    public bool             ResignRetries             { get; } = false;
-    public ICredentials     ProxyCredentials          { get; } = CredentialCache.DefaultCredentials;
-    public TimeSpan?        Timeout                   { get; } = null;
-    public bool             UseDualstackEndpoint      { get; } = false;
-    public bool             ThrottleRetries           { get; } = false;
-    public DateTime         CorrectedUtcNow           { get; } = DateTime.UtcNow;
-    public TimeSpan         ClockOffset               { get; } = TimeSpan.Zero;
-    public int?             MaxConnectionsPerServer   { get; } = null;
-    public bool             CacheHttpClient           { get; } = true;
-    public int              HttpClientCacheSize       { get; } = 4096;
-    public string           ProxyHost                 { get; } = string.Empty;
-    public int              ProxyPort                 { get; } = 0;
+    public RegionEndpoint   RegionEndpoint            => RegionEndpoint.APSoutheast2;
+    public string           RegionEndpointServiceName => string.Empty;
+    public string           ServiceURL                => string.Empty;
+    public bool             UseHttp                   => true;
+    public string           ServiceVersion            => string.Empty;
+    public SigningAlgorithm SignatureMethod           => SigningAlgorithm.HmacSHA256;
+    public string           SignatureVersion          => string.Empty;
+    public string           AuthenticationRegion      => string.Empty;
+    public string           AuthenticationServiceName => string.Empty;
+    public string           UserAgent                 => string.Empty;
+    public bool             DisableLogging            => false;
+    public bool             LogMetrics                => false;
+    public bool             LogResponse               => false;
+    public bool             ReadEntireResponse        => false;
+    public bool             AllowAutoRedirect         => false;
+    public int              BufferSize                => 0;
+    public int              MaxErrorRetry             => 0;
+    public long             ProgressUpdateInterval    => 0;
+    public bool             ResignRetries             => false;
+    public ICredentials     ProxyCredentials          => CredentialCache.DefaultCredentials;
+    public TimeSpan?        Timeout                   => null;
+    public bool             UseDualstackEndpoint      => false;
+    public bool             ThrottleRetries           => false;
+    public DateTime         CorrectedUtcNow           => DateTime.UtcNow;
+    public TimeSpan         ClockOffset               => TimeSpan.Zero;
+    public int?             MaxConnectionsPerServer   => null;
+    public bool             CacheHttpClient           => true;
+    public int              HttpClientCacheSize       => 4096;
+    public string           ProxyHost                 => string.Empty;
+    public int              ProxyPort                 => 0;
 
     public string DetermineServiceURL() => ServiceURL;
 

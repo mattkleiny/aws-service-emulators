@@ -673,7 +673,7 @@ namespace Amazon.S3.Internal
       throw new NotSupportedException();
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
       // no-op
     }

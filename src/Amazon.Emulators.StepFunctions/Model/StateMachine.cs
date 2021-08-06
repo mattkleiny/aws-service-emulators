@@ -9,7 +9,7 @@ namespace Amazon.StepFunctions.Model
   /// <summary>Models a state machine and records it's <see cref="Execution"/>s.</summary>
   internal sealed class StateMachine
   {
-    private readonly ConcurrentDictionary<string, Execution> executionsByArn = new ConcurrentDictionary<string, Execution>(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, Execution> executionsByArn = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly StepFunctionHost host;
     private readonly Impositions      impositions;
@@ -54,7 +54,7 @@ namespace Amazon.StepFunctions.Model
 
           return new Execution(task, executionArn);
         },
-        updateValueFactory: (name, existing) => throw new InvalidOperationException($"The given execution name '{executionName}' already exists.")
+        updateValueFactory: (_, _) => throw new InvalidOperationException($"The given execution name '{executionName}' already exists.")
       );
 
       return executionArn;

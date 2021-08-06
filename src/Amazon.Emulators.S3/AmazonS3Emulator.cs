@@ -12,7 +12,7 @@ namespace Amazon.S3
   /// <summary>An emulator for Amazon's Simple Storage Service (S3).</summary>
   public sealed class AmazonS3Emulator : IAmazonServiceEmulator<IAmazonS3>
   {
-    private readonly ConcurrentDictionary<string, IBucket> bucketsByName = new ConcurrentDictionary<string, IBucket>(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, IBucket> bucketsByName = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly BucketFactory factory;
 

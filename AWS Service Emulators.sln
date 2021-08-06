@@ -7,7 +7,6 @@ ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	LICENSE.md = LICENSE.md
 	Tests.props = Tests.props
-	.github\workflows\build-and-package.yml = .github\workflows\build-and-package.yml
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Code", "Shared Code", "{2E960A52-CEA1-4F1B-8059-64EA1FAE11A8}"
@@ -41,6 +40,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.Lambda.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon.Emulators.StepFunctions.Tests", "tests\Amazon.Emulators.StepFunctions.Tests\Amazon.Emulators.StepFunctions.Tests.csproj", "{A7C93BD6-1CC4-4B14-99DB-E9F662976873}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{3893A79C-B1AB-4A9C-A3EE-54826E494A1B}"
+ProjectSection(SolutionItems) = preProject
+	.github\workflows\build-and-package.yml = .github\workflows\build-and-package.yml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,7 @@ Global
 		{D4097A5C-3350-4193-82DC-9ADFB7B9EEFB} = {043A47DD-CC4B-4A63-AE60-1354AE2D4B6A}
 		{F003658E-4C0D-4507-968A-107EB466BC93} = {043A47DD-CC4B-4A63-AE60-1354AE2D4B6A}
 		{A7C93BD6-1CC4-4B14-99DB-E9F662976873} = {043A47DD-CC4B-4A63-AE60-1354AE2D4B6A}
+		{3893A79C-B1AB-4A9C-A3EE-54826E494A1B} = {2C797D14-0818-4DA2-9A25-22876B790CC2}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{161FAD9F-A47A-4518-9C03-BE0C69F99AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

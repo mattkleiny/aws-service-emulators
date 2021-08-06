@@ -13,8 +13,8 @@ namespace Amazon.SQS.Model
   /// <summary>A <see cref="IQueue"/> implemented on the local file system.</summary>
   public sealed class FileSystemQueue : IQueue, IDisposable
   {
-    private readonly object                  semaphore      = new object();
-    private readonly CancellationTokenSource backgroundTask = new CancellationTokenSource();
+    private readonly object                  semaphore      = new();
+    private readonly CancellationTokenSource backgroundTask = new();
 
     private long sequence;
 

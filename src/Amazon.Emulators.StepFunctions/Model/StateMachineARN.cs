@@ -6,7 +6,7 @@ namespace Amazon.StepFunctions.Model
   /// <summary>Encapsulates an ARN for an AWS state machine.</summary>
   internal sealed class StateMachineARN
   {
-    private static readonly Regex Regex = new Regex(@"^arn:aws:states:([a-zA-Z0-9\-]+):([0-9]+):stateMachine:([a-zA-Z0-9\-]+)$");
+    private static readonly Regex Regex = new(@"^arn:aws:states:([a-zA-Z0-9\-]+):([0-9]+):stateMachine:([a-zA-Z0-9\-]+)$");
 
     /// <summary>Parses a <see cref="StateMachineARN"/> from the given string.</summary>
     public static StateMachineARN Parse(string arn)

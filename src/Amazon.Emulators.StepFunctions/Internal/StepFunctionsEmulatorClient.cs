@@ -19,7 +19,7 @@ namespace Amazon.StepFunctions.Internal
       this.emulator = emulator;
     }
 
-    public override Task<DescribeStateMachineResponse> DescribeStateMachineAsync(DescribeStateMachineRequest request, CancellationToken cancellationToken = new CancellationToken())
+    public override Task<DescribeStateMachineResponse> DescribeStateMachineAsync(DescribeStateMachineRequest request, CancellationToken cancellationToken = new())
     {
       Check.NotNull(request, nameof(request));
 

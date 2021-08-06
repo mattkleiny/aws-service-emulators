@@ -11,7 +11,7 @@ namespace Amazon.SQS
   /// <summary>An emulator for Amazon's Simple Queue Service (SQS).</summary>
   public sealed class AmazonSQSEmulator : IAmazonServiceEmulator<IAmazonSQS>
   {
-    private readonly ConcurrentDictionary<QueueUrl, IQueue> queuesByUrl = new ConcurrentDictionary<QueueUrl, IQueue>();
+    private readonly ConcurrentDictionary<QueueUrl, IQueue> queuesByUrl = new();
 
     private readonly RegionEndpoint endpoint;
     private readonly long           accountId;

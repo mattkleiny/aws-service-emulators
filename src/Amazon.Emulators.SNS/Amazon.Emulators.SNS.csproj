@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Description>An emulator for the Simple Notification Service (SNS)</Description>
     <RootNamespace>Amazon.SNS</RootNamespace>
   </PropertyGroup>

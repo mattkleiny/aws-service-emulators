@@ -6,9 +6,9 @@ namespace Amazon.SQS.Model
   /// <summary>Models the URL for an Amazon SQS <see cref="IQueue"/>.</summary>
   public sealed class QueueUrl
   {
-    private static readonly Regex Regex = new Regex(@"^https?:\/\/sqs\.([a-zA-Z0-9\-]+)\.amazonaws\.com\/([0-9]+)\/([a-zA-Z0-9\-]+)\/?");
+    private static readonly Regex Regex = new(@"^https?:\/\/sqs\.([a-zA-Z0-9\-]+)\.amazonaws\.com\/([0-9]+)\/([a-zA-Z0-9\-]+)\/?");
 
-    /// <summary>Attemps to parse a <see cref="QueueUrl"/> from the given raw url.</summary>
+    /// <summary>Attempts to parse a <see cref="QueueUrl"/> from the given raw url.</summary>
     public static QueueUrl Parse(string url)
     {
       Check.NotNullOrEmpty(url, nameof(url));

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Amazon.StepFunction;
 using Amazon.StepFunctions;
 using Amazon.StepFunctions.Model;
 using Xunit;
@@ -12,7 +11,7 @@ namespace Amazon.Emulators.StepFunctions.Tests.Internal
   {
     private const string TestMachineARN = "arn:aws:states:ap-southeast-2:123456789:stateMachine:test-machine";
 
-    public EmulatorFixture Fixture { get; } = new EmulatorFixture();
+    public EmulatorFixture Fixture { get; } = new();
 
     public AmazonStepFunctionsEmulator Emulator => Fixture.Emulator;
     public IAmazonStepFunctions        Client   => Emulator.Client;

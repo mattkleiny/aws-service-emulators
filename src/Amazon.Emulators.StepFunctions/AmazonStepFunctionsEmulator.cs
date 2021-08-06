@@ -13,7 +13,7 @@ namespace Amazon.StepFunctions
   /// <summary>An emulator for Amazon's StepFunctions.</summary>
   public sealed class AmazonStepFunctionsEmulator : IAmazonServiceEmulator<IAmazonStepFunctions>
   {
-    private readonly ConcurrentDictionary<string, StateMachine> machinesByArn = new ConcurrentDictionary<string, StateMachine>(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, StateMachine> machinesByArn = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly SpecificationResolver resolver;
     private readonly StepHandlerFactory    factory;

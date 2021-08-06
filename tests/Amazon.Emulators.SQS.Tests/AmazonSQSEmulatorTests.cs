@@ -5,7 +5,7 @@ namespace Amazon.SQS
 {
   public class AmazonSQSEmulatorTests
   {
-    private readonly AmazonSQSEmulator emulator = new AmazonSQSEmulator(RegionEndpoint.APSoutheast2, 123456789, url => new FileSystemQueue(url, basePath: "./queues"));
+    private readonly AmazonSQSEmulator emulator = new(RegionEndpoint.APSoutheast2, 123456789, url => new FileSystemQueue(url, basePath: "./queues"));
 
     [Fact]
     public void it_should_get_or_create_queues_via_url()

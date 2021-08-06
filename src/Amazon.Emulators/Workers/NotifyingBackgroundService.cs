@@ -11,7 +11,7 @@ namespace Amazon.Emulators.Workers
   /// <summary>A <see cref="BackgroundServiceBase"/> that supports a notification process.</summary>
   public abstract class NotifyingBackgroundService : BackgroundServiceBase
   {
-    private readonly BlockingCollection<Notification> notifications = new BlockingCollection<Notification>();
+    private readonly BlockingCollection<Notification> notifications = new();
     private readonly NotificationDispatcher           dispatcher;
 
     private long sequence;

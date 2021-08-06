@@ -6,6 +6,8 @@ using Amazon.Lambda.Diagnostics;
 using Amazon.Lambda.Hosting;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Amazon.SimpleNotificationService;
+using Amazon.SNS;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using Amazon.StepFunction.Hosting;
@@ -33,7 +35,9 @@ namespace Amazon.Emulators.Example
       .UseStartup<Startup>();
 
     public static async Task<int> Main(string[] args)
-      => await HostBuilder.RunLambdaConsoleAsync(args);
+    {
+      return await HostBuilder.RunLambdaConsoleAsync(args);
+    }
 
     public Startup(IConfiguration configuration, IHostingEnvironment environment)
     {
@@ -58,7 +62,7 @@ namespace Amazon.Emulators.Example
       if (Environment.IsDevelopment())
       {
         services.AddEmulator<IAmazonSQS, AmazonSQSEmulator>(
-          provider => new AmazonSQSEmulator(
+          _ => new AmazonSQSEmulator(
             endpoint: RegionEndpoint.APSoutheast2,
             accountId: 123456789,
             factory: url => new FileSystemQueue(url, basePath: "./Queues")
@@ -69,9 +73,13 @@ namespace Amazon.Emulators.Example
         );
 
         services.AddEmulator<IAmazonS3, AmazonS3Emulator>(
-          provider => new AmazonS3Emulator(
+          _ => new AmazonS3Emulator(
             factory: name => new FileSystemBucket(name, basePath: "./Buckets")
           )
+        );
+
+        services.AddEmulator<IAmazonSimpleNotificationService, AmazonSNSEmulator>(
+          _ => new AmazonSNSEmulator()
         );
 
         services.AddEmulator<IAmazonLambda, AmazonLambdaEmulator>(
@@ -82,7 +90,7 @@ namespace Amazon.Emulators.Example
 
         services.AddEmulator<IAmazonStepFunctions, AmazonStepFunctionsEmulator>(
           provider => new AmazonStepFunctionsEmulator(
-            resolver: (region, id, name) => EmbeddedResources.TestMachine,
+            resolver: (_, _, _) => EmbeddedResources.TestMachine,
             factory: provider.ToStepHandlerFactory(),
             impositions: new Impositions
             {
